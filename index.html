@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Venüs Bowling - QR Menü</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #7b4d9b; --accent: #fa0050; --bg: #f8f9fa; --text: #1a1a1a; --gray: #707070; }
+        * { box-sizing: border-box; font-family: 'Open Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { margin: 0; background: var(--bg); color: var(--text); padding-bottom: 120px; }
+
+        .header-container { 
+            background: white; padding: 20px; text-align: center; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05); border-bottom: 1px solid #f0f0f0;
+        }
+        .header-container img { max-width: 200px; height: auto; display: block; margin: 0 auto; cursor: pointer; }
+        .status-badge {
+            display: inline-block; margin-top: 10px; background: #e8f5e9; color: #2e7d32;
+            padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; border: 1px solid #c8e6c9;
+        }
+
+        .cat-nav { position: sticky; top: 0; background: white; display: flex; overflow-x: auto; padding: 12px 15px; gap: 15px; border-bottom: 1px solid #eee; z-index: 1000; scrollbar-width: none; }
+        .cat-nav::-webkit-scrollbar { display: none; }
+        .cat-item { white-space: nowrap; font-size: 14px; font-weight: 700; color: var(--gray); cursor: pointer; border-bottom: 3px solid transparent; padding-bottom: 5px; transition: 0.3s; }
+        .cat-item.active { color: var(--primary); border-bottom-color: var(--primary); }
+
+        .container { max-width: 700px; margin: auto; }
+        .section-box { background: white; margin-top: 12px; padding: 15px; }
+        .section-title { font-size: 18px; font-weight: 800; color: #333; margin-bottom: 15px; border-left: 4px solid var(--primary); padding-left: 10px; }
+        
+        .product-card { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #f0f0f0; cursor: pointer; }
+        .product-card:last-child { border: none; }
+        .p-info { flex: 1; padding-right: 12px; }
+        .p-name { font-size: 15px; font-weight: 700; margin: 0; color: #111; }
+        .p-desc { font-size: 12px; color: var(--gray); margin: 4px 0; line-height: 1.4; }
+        .p-price { font-size: 15px; font-weight: 700; color: #000; margin-top: 4px; }
+
+        .p-img-box { position: relative; width: 80px; height: 80px; }
+        .p-img { width: 80px; height: 80px; border-radius: 10px; object-fit: cover; background: #eee; }
+        .add-btn { position: absolute; bottom: -5px; right: -5px; background: white; color: var(--accent); border: 1px solid #ddd; width: 28px; height: 28px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+
+        .cart-bar { position: fixed; bottom: 20px; left: 15px; right: 15px; background: var(--accent); color: white; padding: 16px 20px; border-radius: 15px; display: none; justify-content: space-between; align-items: center; box-shadow: 0 10px 25px rgba(250,0,80,0.3); z-index: 1500; cursor: pointer; }
+
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; z-index: 2000; align-items: flex-end; justify-content: center; }
+        .modal-box { background: white; width: 100%; max-width: 550px; border-radius: 25px 25px 0 0; padding: 20px; animation: slideUp 0.3s ease-out; max-height: 90vh; overflow-y: auto; }
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        
+        textarea, input[type="text"], input[type="number"], select { width: 100%; border: 1px solid #ddd; border-radius: 10px; padding: 10px; margin: 6px 0; font-size: 14px; outline: none; }
+        textarea { height: 70px; }
+        
+        .btn-confirm { width: 100%; background: var(--accent); color: white; border: none; padding: 14px; border-radius: 12px; font-weight: 700; font-size: 15px; cursor: pointer; }
+        .btn-final { width: 100%; background: #27ae60; color: white; border: none; padding: 16px; border-radius: 12px; font-weight: 700; font-size: 16px; margin-top: 10px; cursor: pointer; }
+        .btn-admin { background: var(--primary); color: white; border: none; padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer; width: 100%; margin-top: 10px; }
+
+        .cart-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #f2f2f2; }
+        .remove-btn { color: #eb4d4b; font-size: 13px; font-weight: 700; cursor: pointer; }
+
+        .admin-item-row { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding: 8px 0; font-size: 13px; }
+        .admin-actions { display: flex; gap: 5px; align-items: center; }
+        .admin-btn-sm { padding: 4px 8px; border-radius: 5px; border: none; font-size: 11px; font-weight: 700; cursor: pointer; }
+        .btn-edit { background: #f39c12; color: white; }
+        .btn-del { background: #e74c3c; color: white; }
+        .btn-move { background: #3498db; color: white; }
+
+        .stock-toggle { display: flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 700; background: #f0f0f0; padding: 4px 8px; border-radius: 6px; cursor: pointer; }
+        .stock-toggle input { cursor: pointer; margin: 0; }
+
+        .callout { margin: 10px 15px 0; padding: 12px; background: #fff0f5; border-left: 4px solid var(--accent); border-radius: 10px; font-size: 13px; color: #333; text-align: center; box-shadow: 0 2px 6px rgba(0,0,0,.04); font-weight: 600; }
+    </style>
+</head>
+<body>
+
+<div class="header-container">
+    <img src="https://i.imgur.com/JdlJSWi_d.jpeg?maxwidth=520&shape=thumb&fidelity=high" alt="Venüs Bowling Logo" onclick="handleLogoClick()">
+    <div class="status-badge">● Restoran Açık</div>
+</div>
+<div class="callout">🎳 Oyunu bölme, masandan siparişini ver! Yiyecek ve soğuk içeceğin doğrudan kulvarına gelsin.</div>
+
+<div class="cat-nav" id="main-nav"></div>
+<div class="container" id="main-container"></div>
+
+<!-- MÜŞTERİ NOT MODALI -->
+<div class="modal" id="modal-note">
+    <div class="modal-box">
+        <h3 id="m-title" style="margin:0">Ürün Adı</h3>
+        <p style="font-size:12px; color:gray; margin-top:5px;">İstediğiniz bir değişiklik veya ekstra not var mı?</p>
+        <textarea id="m-note" placeholder="Örn: İçecek soğuk olsun, sosu bol olsun..."></textarea>
+        <button class="btn-confirm" onclick="addToCartFinal()">Sepete Ekle</button>
+        <button onclick="closeModal('modal-note')" style="width:100%; background:none; color:gray; border:none; margin-top:10px; cursor:pointer;">Vazgeç</button>
+    </div>
+</div>
+
+<!-- SEPET MODALI -->
+<div class="modal" id="modal-cart">
+    <div class="modal-box">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+            <h2 style="margin:0; font-size:20px;">Sipariş Kontrolü 🛒</h2>
+            <button onclick="closeModal('modal-cart')" style="border:none; background:none; font-size:22px; cursor:pointer;">✕</button>
+        </div>
+        <input type="text" id="table-number" placeholder="Kulvar / Masa No (Örn: Kulvar 3 Veya Masa 5)">
+        <div id="cart-check-list"></div>
+        <div style="margin-top:15px; border-top:2px solid #f8f8f8; padding-top:10px;">
+            <div style="display:flex; justify-content:space-between; font-weight:800; font-size:20px;">
+                <span>Toplam:</span>
+                <span id="final-price">0,00 ₺</span>
+            </div>
+            <button class="btn-final" onclick="sendToWhatsApp()">Siparişi Onayla ve Gönder</button>
+        </div>
+    </div>
+</div>
+
+<!-- YÖNETİCİ PANELİ MODALI -->
+<div class="modal" id="modal-admin">
+    <div class="modal-box">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <h3 style="margin:0; color:var(--primary);">⚙️ Yönetici Paneli</h3>
+            <button onclick="closeModal('modal-admin')" style="border:none; background:none; font-size:22px; cursor:pointer;">✕</button>
+        </div>
+        <hr style="border:0; border-top:1px solid #eee; margin:10px 0;">
+
+        <h4>📂 Kategori Sıralamasını Değiştir</h4>
+        <div id="admin-cat-list" style="max-height: 150px; overflow-y: auto; background: #fdfdfd; border: 1px solid #eee; padding: 5px; border-radius: 8px;"></div>
+
+        <h4 style="margin-top:15px;">➕ Yeni Ürün Ekle / Düzenle</h4>
+        <input type="hidden" id="admin-edit-index">
+        <select id="admin-cat-select"></select>
+        <input type="text" id="admin-p-name" placeholder="Ürün Adı">
+        <input type="number" id="admin-p-price" placeholder="Fiyat (TL)">
+        <input type="text" id="admin-p-desc" placeholder="Açıklama / İçerik">
+        <input type="text" id="admin-p-img" placeholder="Görsel Linki (Opsiyonel)">
+        <button class="btn-admin" onclick="saveProduct()">Ürünü Kaydet</button>
+
+        <h4 style="margin-top:20px;">📝 Stok Durumu & Ürün Yönetimi</h4>
+        <div id="admin-product-list" style="max-height: 220px; overflow-y: auto;"></div>
+
+        <button onclick="resetMenuToDefault()" style="background:#e74c3c; color:white; border:none; padding:8px; border-radius:8px; width:100%; margin-top:15px; font-size:12px; cursor:pointer;">Varsayılan Menüye Sıfırla</button>
+    </div>
+</div>
+
+<div class="cart-bar" id="cart-bar" onclick="openCartModal()">
+    <div style="font-weight:700;">Siparişi Gözden Geçir (<span id="cart-qty">0</span>)</div>
+    <div id="cart-total" style="font-weight:800; font-size:16px;">0,00 ₺</div>
+</div>
+
+<script>
+    const DEFAULT_MENU = {
+        categories: [
+            { id: "bowling_kombo", name: "🔥 Bowling Kombo Paketler" },
+            { id: "atistirmalik", name: "🍟 Çıtır Atıştırmalıklar" },
+            { id: "icecekler", name: "🥤 Soğuk & Sıcak İçecekler" },
+            { id: "aperatif", name: "🍔 Aperatif & Burger" },
+            { id: "penneler", name: "🍝 Makarnalar" },
+            { id: "tavuk", name: "🍗 Tavuk Menü" },
+            { id: "izgara", name: "🥩 Izgara & Mantı" },
+            { id: "salata", name: "🥗 Salatalar" },
+            { id: "ozsut_sutlu", name: "🍰 Özsüt - Sütlü & Şerbetli" },
+            { id: "ozsut_kutu", name: "📦 Özsüt - Kutu Pastalar" },
+            { id: "ozsut_mini", name: "🍮 Özsüt - Mini Miss Tin" },
+            { id: "ozsut_dilim", name: "🍰 Özsüt - Dilim Pastalar" },
+            { id: "ozsut_adet", name: "🧁 Özsüt - Adet Pastalar" },
+            { id: "ozsut_cheesecake", name: "🧀 Özsüt - Cheesecake'ler" }
+        ],
+        products: {
+            bowling_kombo: [
+                {n: "Strike Atıştırmalık Kovası", p: 420, d: "Çıtır Tavuk Parçaları + Sosis + Elma Dilim Patates + 2 Adet Soğuk İçecek", i: "https://i.imgur.com/WHTo1TA_d.jpeg?maxwidth=520&shape=thumb&fidelity=high", available: true},
+                {n: "Grup Paylaşım Kovası", p: 580, d: "Ortaya Karışık Sıcak Atıştırmalık Tabağı + Soğan Halkası + Mozzarella Sticks + 4 Adet İçecek", i: "https://i.imgur.com/Tl0hZh1_d.jpeg?maxwidth=520&shape=thumb&fidelity=high", available: true},
+                {n: "Pizza & Oyun Kombosu", p: 490, d: "1 Adet Büyük Boy Pizza + Patates Cipsi + 1 Litre İçecek", i: "https://i.imgur.com/ZeeomJh_d.jpeg?maxwidth=520&shape=thumb&fidelity=high", available: true}
+            ],
+            atistirmalik: [
+                {n: "Patates Cipsi (Baharatlı)", p: 150, d: "Özel Baharat Harmanlı Çıtır Patates Cipsi ve Dip Soslar", i: "https://i.imgur.com/Tl0hZh1_d.jpeg?maxwidth=520&shape=thumb&fidelity=high", available: true},
+                {n: "Çıtır Tavuk Sepeti", p: 260, d: "Panelenmiş Çıtır Tavuk Parçaları, Patates ve Özel Sos", i: "https://i.imgur.com/WHTo1TA_d.jpeg?maxwidth=520&shape=thumb&fidelity=high", available: true},
+                {n: "Ortaya Karışık Sıcak Sepeti", p: 320, d: "Sosis, Soğan Halkası, Paçanga Böreği, Patates Cipsi ve Dip Soslar", i: "https://i.imgur.com/Tl0hZh1_d.jpeg?maxwidth=520&shape=thumb&fidelity=high", available: true}
+            ],
+            icecekler: [
+                {n: "Kutu Meşrubatlar (333ml)", p: 70, d: "Coca-Cola, Fanta, Sprite, Fuse Tea Seçenekleri", i: "", available: true},
+                {n: "Red Bull Enerji İçeceği", p: 110, d: "250ml Kutuda Tazeleyici Enerji", i: "", available: true},
+                {n: "Meyve Suları", p: 65, d: "Cappy Çeşitleri (Şeftali, Vişne, Karışık)", i: "", available: true},
+                {n: "Maden Suyu / Meyveli Soda", p: 45, d: "Sade Maden Suyu veya Meyveli Soda", i: "", available: true},
+                {n: "Türk Kahvesi", p: 75, d: "Geleneksel Pişirim, Çikolata İkramlı", i: "", available: true},
+                {n: "Demleme Çay", p: 30, d: "Taze İnce Belli Bardak Çay", i: "", available: true}
+            ],
+            penneler: [
+                {n:"Tavuklu Penne", p:290, d:"Tavuk Fleto, Sebzeler, Venüs Sos, Barilla Penne", i:"https://i.imgur.com/ZeeomJh_d.jpeg?maxwidth=520&shape=thumb&fidelity=high", available: true},
+                {n:"Sebzeli Penne", p:260, d:"Yeşil/Kırmızı Biber, Mantar, Venüs Sos, Barilla Penne", i:"https://i.imgur.com/ZeeomJh_d.jpeg?maxwidth=520&shape=thumb&fidelity=high", available: true}
+            ],
+            tavuk: [
+                {n:"Barbekü Soslu Tavuk Menü", p:350, d:"Barbekü Tavuk + Mevsim Salata + Makarna", i:"https://i.imgur.com/WHTo1TA_d.jpeg?maxwidth=520&shape=thumb&fidelity=high", available: true}
+            ],
+            aperatif: [
+                {n:"Hamburger Menü", p:320, d:"Ev Yapımı Köfte + Patates Cipsi", i:"https://i.imgur.com/Tl0hZh1_d.jpeg?maxwidth=520&shape=thumb&fidelity=high", available: true}
+            ],
+            izgara: [
+                {n:"Izgara Köfte", p:380, d:"Ev yapımı Köfte, Cips, Salata", i:"https://i.imgur.com/UbGRGFI.jpeg", available: true}
+            ],
+            salata: [
+                {n:"Akdeniz Salata", p:190, d:"Taze Yeşillikler, Beyaz Peynir", i:"https://i.imgur.com/JIuEpuL_d.jpeg?maxwidth=520&shape=thumb&fidelity=high", available: true}
+            ],
+            ozsut_sutlu: [
+                {n: "Kazandibi", p: 280, d: "Özsüt Tatlı Menüsü", i: "", available: true},
+                {n: "Fıstıklı Kazandibi", p: 315, d: "Özsüt Tatlı Menüsü", i: "", available: true},
+                {n: "Tavukgöğsü", p: 290, d: "Özsüt Tatlı Menüsü", i: "", available: true},
+                {n: "Profiterol", p: 305, d: "Özsüt Tatlı Menüsü", i: "", available: true},
+                {n: "Supangle", p: 305, d: "Özsüt Tatlı Menüsü", i: "", available: true},
+                {n: "Fırın Sütlaç", p: 290, d: "Özsüt Tatlı Menüsü", i: "", available: true},
+                {n: "Karamelli Trileçe", p: 280, d: "Özsüt Tatlı Menüsü", i: "", available: true}
+            ],
+            ozsut_kutu: [
+                {n: "Frambuazlı Kutu Pasta", p: 375, d: "Porsiyon Kutu Pasta", i: "", available: true},
+                {n: "Krokanlı Kutu Pasta", p: 340, d: "Porsiyon Kutu Pasta", i: "", available: true},
+                {n: "Çikolatalı Kutu Pasta", p: 340, d: "Porsiyon Kutu Pasta", i: "", available: true}
+            ],
+            ozsut_mini: [
+                {n: "Mini Miss Tin Tiramisu", p: 750, d: "Porsiyon Özel Sunum", i: "", available: true},
+                {n: "Mini Miss Tin Ananas & Badem", p: 750, d: "Porsiyon Özel Sunum", i: "", available: true}
+            ],
+            ozsut_dilim: [
+                {n: "Karaorman Frambuaz", p: 345, d: "Porsiyon Dilim Pasta", i: "", available: true},
+                {n: "Kanaş", p: 350, d: "Porsiyon Dilim Pasta", i: "", available: true},
+                {n: "Tiramisu", p: 345, d: "Porsiyon Dilim Pasta", i: "", available: true}
+            ],
+            ozsut_adet: [
+                {n: "Mozaik Pasta", p: 310, d: "Porsiyon Adet Pasta", i: "", available: true},
+                {n: "Sufle", p: 500, d: "Porsiyon Adet Pasta", i: "", available: true}
+            ],
+            ozsut_cheesecake: [
+                {n: "Frambuazlı Cheesecake", p: 345, d: "Porsiyon Cheesecake", i: "", available: true},
+                {n: "Özsüt San Sebastian Cheesecake", p: 395, d: "Porsiyon Cheesecake", i: "", available: true}
+            ]
+        }
+    };
+
+    let menuData = JSON.parse(localStorage.getItem('venus_menu_v7')) || DEFAULT_MENU;
+    let cart = [];
+    let tempItem = null;
+    let logoClickCount = 0;
+    let logoClickTimer = null;
+
+    function saveMenuToStorage() {
+        localStorage.setItem('venus_menu_v7', JSON.stringify(menuData));
+        initUI();
+    }
+
+    function initUI() {
+        const nav = document.getElementById('main-nav');
+        const container = document.getElementById('main-container');
+        const adminSelect = document.getElementById('admin-cat-select');
+        
+        nav.innerHTML = "";
+        container.innerHTML = "";
+        adminSelect.innerHTML = "";
+
+        menuData.categories.forEach((cat, index) => {
+            nav.innerHTML += `<div class="cat-item ${index===0?'active':''}" data-cat="${cat.id}" onclick="go('${cat.id}')">${cat.name}</div>`;
+            adminSelect.innerHTML += `<option value="${cat.id}">${cat.name}</option>`;
+
+            let productsHTML = "";
+            const items = menuData.products[cat.id] || [];
+            
+            items.forEach((item) => {
+                if (item.available !== false) {
+                    const itemString = JSON.stringify(item.n).replace(/"/g, '&quot;');
+                    productsHTML += `
+                        <div class="product-card" onclick="openNoteModal(${itemString}, ${item.p})">
+                            <div class="p-info">
+                                <p class="p-name">${item.n}</p>
+                                <p class="p-desc">${item.d}</p>
+                                <p class="p-price">${item.p},00 ₺</p>
+                            </div>
+                            <div class="p-img-box">
+                                <img class="p-img" src="${item.i}" onerror="this.onerror=null; this.style.visibility='hidden';">
+                                <div class="add-btn">+</div>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+
+            container.innerHTML += `
+                <div class="section-box" id="section-${cat.id}">
+                    <div class="section-title">${cat.name}</div>
+                    <div>${productsHTML || '<p style="font-size:12px; color:gray;">Bu kategoride aktif ürün bulunmamaktadır.</p>'}</div>
+                </div>
+            `;
+        });
+        renderAdminCategoryList();
+        renderAdminProductList();
+    }
+
+    function renderAdminCategoryList() {
+        const catList = document.getElementById('admin-cat-list');
+        catList.innerHTML = "";
+        menuData.categories.forEach((cat, index) => {
+            catList.innerHTML += `
+                <div class="admin-item-row">
+                    <span><b>${index + 1}.</b> ${cat.name}</span>
+                    <div class="admin-actions">
+                        ${index > 0 ? `<button class="admin-btn-sm btn-move" onclick="moveCategory(${index}, -1)">⬆️</button>` : ''}
+                        ${index < menuData.categories.length - 1 ? `<button class="admin-btn-sm btn-move" onclick="moveCategory(${index}, 1)">⬇️</button>` : ''}
+                    </div>
+                </div>
+            `;
+        });
+    }
+
+    function moveCategory(index, direction) {
+        const targetIndex = index + direction;
+        if (targetIndex < 0 || targetIndex >= menuData.categories.length) return;
+        
+        const temp = menuData.categories[index];
+        menuData.categories[index] = menuData.categories[targetIndex];
+        menuData.categories[targetIndex] = temp;
+
+        saveMenuToStorage();
+    }
+
+    function handleLogoClick() {
+        logoClickCount++;
+        clearTimeout(logoClickTimer);
+        if (logoClickCount === 5) {
+            logoClickCount = 0;
+            const pass = prompt("Yönetici Şifresini Girin:");
+            if (pass === "1234") {
+                document.getElementById('modal-admin').style.display = 'flex';
+            } else if (pass !== null) {
+                alert("Hatalı Şifre!");
+            }
+        } else {
+            logoClickTimer = setTimeout(() => { logoClickCount = 0; }, 2000);
+        }
+    }
+
+    function saveProduct() {
+        const catId = document.getElementById('admin-cat-select').value;
+        const name = document.getElementById('admin-p-name').value.trim();
+        const price = parseFloat(document.getElementById('admin-p-price').value);
+        const desc = document.getElementById('admin-p-desc').value.trim();
+        const img = document.getElementById('admin-p-img').value.trim();
+        const editIdx = document.getElementById('admin-edit-index').value;
+
+        if (!name || isNaN(price)) { alert("Lütfen ürün adı ve geçerli bir fiyat girin!"); return; }
+
+        if (!menuData.products[catId]) menuData.products[catId] = [];
+
+        if (editIdx !== "") {
+            const isAvail = menuData.products[catId][editIdx].available !== false;
+            menuData.products[catId][editIdx] = { n: name, p: price, d: desc, i: img, available: isAvail };
+            document.getElementById('admin-edit-index').value = "";
+        } else {
+            menuData.products[catId].push({ n: name, p: price, d: desc, i: img, available: true });
+        }
+
+        saveMenuToStorage();
+        document.getElementById('admin-p-name').value = "";
+        document.getElementById('admin-p-price').value = "";
+        document.getElementById('admin-p-desc').value = "";
+        document.getElementById('admin-p-img').value = "";
+        alert("Ürün Başarıyla Kaydedildi!");
+    }
+
+    function renderAdminProductList() {
+        const list = document.getElementById('admin-product-list');
+        list.innerHTML = "";
+        for (let catId in menuData.products) {
+            menuData.products[catId].forEach((item, index) => {
+                const isChecked = item.available !== false ? 'checked' : '';
+                list.innerHTML += `
+                    <div class="admin-item-row">
+                        <span style="${item.available === false ? 'text-decoration:line-through; color:gray;' : ''}"><b>${item.n}</b> - ${item.p}₺</span>
+                        <div class="admin-actions">
+                            <label class="stock-toggle">
+                                <input type="checkbox" ${isChecked} onchange="toggleStock('${catId}', ${index})">
+                                Var
+                            </label>
+                            <button class="admin-btn-sm btn-edit" onclick="editProduct('${catId}', ${index})">Düzenle</button>
+                            <button class="admin-btn-sm btn-del" onclick="deleteProduct('${catId}', ${index})">Sil</button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+    }
+
+    function toggleStock(catId, index) {
+        const item = menuData.products[catId][index];
+        item.available = (item.available === false) ? true : false;
+        saveMenuToStorage();
+    }
+
+    function editProduct(catId, index) {
+        const item = menuData.products[catId][index];
+        document.getElementById('admin-cat-select').value = catId;
+        document.getElementById('admin-p-name').value = item.n;
+        document.getElementById('admin-p-price').value = item.p;
+        document.getElementById('admin-p-desc').value = item.d;
+        document.getElementById('admin-p-img').value = item.i;
+        document.getElementById('admin-edit-index').value = index;
+    }
+
+    function deleteProduct(catId, index) {
+        if (confirm("Bu ürünü silmek istediğinize emin misiniz?")) {
+            menuData.products[catId].splice(index, 1);
+            saveMenuToStorage();
+        }
+    }
+
+    function resetMenuToDefault() {
+        if (confirm("Tüm değişiklikler sıfırlanıp varsayılan tam menüye dönülecektir. Onaylıyor musunuz?")) {
+            localStorage.removeItem('venus_menu_v7');
+            menuData = DEFAULT_MENU;
+            saveMenuToStorage();
+        }
+    }
+
+    function openNoteModal(n, p) { tempItem = {n, p}; document.getElementById('m-title').innerText = n; document.getElementById('modal-note').style.display = 'flex'; }
+    function closeModal(id) { document.getElementById(id).style.display = 'none'; if(id === 'modal-note') document.getElementById('m-note').value = ''; }
+    
+    function addToCartFinal() {
+        if(!tempItem) return;
+        cart.push({id: Date.now(), ...tempItem, note: document.getElementById('m-note').value});
+        updateUI();
+        closeModal('modal-note');
+    }
+
+    function updateUI() {
+        const total = cart.reduce((s, i) => s + i.p, 0);
+        document.getElementById('cart-qty').innerText = cart.length;
+        document.getElementById('cart-total').innerText = total.toFixed(2) + " ₺";
+        document.getElementById('cart-bar').style.display = cart.length > 0 ? 'flex' : 'none';
+    }
+
+    function openCartModal() {
+        const checkList = document.getElementById('cart-check-list');
+        checkList.innerHTML = "";
+        cart.forEach(item => {
+            checkList.innerHTML += `
+                <div class="cart-row">
+                    <div style="flex:1">
+                        <div style="font-weight:700;">${item.n}</div>
+                        <div style="font-size:12px; color:var(--accent);">${item.note ? '📝 ' + item.note : ''}</div>
+                        <div style="font-weight:700; margin-top:4px;">${item.p},00 ₺</div>
+                    </div>
+                    <div class="remove-btn" onclick="removeItem(${item.id})">Kaldır</div>
+                </div>
+            `;
+        });
+        document.getElementById('final-price').innerText = cart.reduce((s, i) => s + i.p, 0).toFixed(2) + " ₺";
+        document.getElementById('modal-cart').style.display = 'flex';
+    }
+
+    function removeItem(id) {
+        cart = cart.filter(i => i.id !== id);
+        updateUI();
+        if(cart.length === 0) closeModal('modal-cart');
+        else openCartModal();
+    }
+
+    function go(id) {
+        const section = document.getElementById("section-" + id);
+        if (!section) return;
+        window.scrollTo({ top: section.offsetTop - 110, behavior: "smooth" });
+        document.querySelectorAll(".cat-item").forEach(i => i.classList.remove("active"));
+        const navItem = document.querySelector(`.cat-item[data-cat="${id}"]`);
+        if (navItem) navItem.classList.add("active");
+    }
+
+    function sendToWhatsApp() {
+        const tableNum = document.getElementById('table-number').value.trim() || 'Belirtilmedi';
+        let txt = "*VENÜS BOWLING SİPARİŞİ*\n--------------------------\n";
+        txt += `*Masa / Kulvar:* ${tableNum}\n--------------------------\n`;
+        cart.forEach((item, i) => {
+            txt += `*${i+1}. ${item.n}* (${item.p}₺)\n`;
+            if(item.note) txt += `   _Not: ${item.note}_\n`;
+        });
+        txt += `\n*Toplam: ${cart.reduce((s, i) => s + i.p, 0).toFixed(2)} ₺*\n--------------------------`;
+        window.open(`https://wa.me/905374271737?text=${encodeURIComponent(txt)}`, '_blank');
+    }
+
+    initUI();
+</script>
+</body>
+</html>
