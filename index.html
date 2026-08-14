@@ -109,7 +109,7 @@
 
         .admin-item-row { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding: 10px 0; font-size: 13px; }
         .admin-actions { display: flex; gap: 6px; align-items: center; }
-        .admin-btn-sm { padding: 5px 10px; border-radius: 6px; border: none; font-size: 11px; font-weight: 700; cursor: pointer; }
+        .admin-btn-sm { padding: 6px 10px; border-radius: 8px; border: none; font-size: 11px; font-weight: 700; cursor: pointer; }
         .btn-edit { background: #ff9100; color: white; }
         .btn-del { background: #ff5252; color: white; }
         .btn-move { background: #29b6f6; color: white; }
@@ -169,14 +169,12 @@
         <hr style="border:0; border-top:1px solid var(--border-color); margin:12px 0;">
 
         <!-- KATEGORİ YÖNETİMİ -->
-        <h4 style="margin:5px 0 8px; color:#00f0ff;">📂 Kategori Ekle / Düzenle / Sırala</h4>
+        <h4 style="margin:5px 0 8px; color:#00f0ff;">📂 Kategoriler</h4>
         <div style="display:flex; gap:8px; margin-bottom:10px;">
-            <input type="hidden" id="admin-cat-edit-index">
-            <input type="text" id="admin-new-cat-name" placeholder="Kategori Adı" style="margin:0;">
-            <button id="admin-cat-submit-btn" onclick="saveCategory()" style="background:#00c853; color:white; border:none; padding:0 15px; border-radius:12px; font-weight:700; cursor:pointer; white-space:nowrap;">+ Ekle</button>
-            <button id="admin-cat-cancel-btn" onclick="cancelCatEdit()" style="background:#555; color:white; border:none; padding:0 10px; border-radius:12px; font-weight:700; cursor:pointer; display:none;">İptal</button>
+            <input type="text" id="admin-new-cat-name" placeholder="Yeni Kategori Adı" style="margin:0;">
+            <button onclick="addCategory()" style="background:#00c853; color:white; border:none; padding:0 15px; border-radius:12px; font-weight:700; cursor:pointer; white-space:nowrap;">+ Ekle</button>
         </div>
-        <div id="admin-cat-list" style="max-height: 150px; overflow-y: auto; background: #0f0c20; border: 1px solid var(--border-color); padding: 8px; border-radius: 12px;"></div>
+        <div id="admin-cat-list" style="max-height: 160px; overflow-y: auto; background: #0f0c20; border: 1px solid var(--border-color); padding: 8px; border-radius: 12px;"></div>
 
         <hr style="border:0; border-top:1px solid var(--border-color); margin:15px 0;">
 
@@ -289,14 +287,14 @@
         }
     };
 
-    let menuData = JSON.parse(localStorage.getItem('venus_menu_v11')) || DEFAULT_MENU;
+    let menuData = JSON.parse(localStorage.getItem('venus_menu_v12')) || DEFAULT_MENU;
     let cart = [];
     let tempItem = null;
     let logoClickCount = 0;
     let logoClickTimer = null;
 
     function saveMenuToStorage() {
-        localStorage.setItem('venus_menu_v11', JSON.stringify(menuData));
+        localStorage.setItem('venus_menu_v12', JSON.stringify(menuData));
         initUI();
     }
 
@@ -346,41 +344,26 @@
         renderAdminProductList();
     }
 
-    function saveCategory() {
+    /* KATEGORİ İŞLEMLERİ */
+    function addCategory() {
         const input = document.getElementById('admin-new-cat-name');
-        const editIdx = document.getElementById('admin-cat-edit-index').value;
         const catName = input.value.trim();
-        
         if (!catName) { alert("Lütfen bir kategori adı girin!"); return; }
 
-        if (editIdx !== "") {
-            // Kategori Adı Düzenleme
-            menuData.categories[editIdx].name = catName;
-            cancelCatEdit();
-        } else {
-            // Yeni Kategori Ekleme
-            const catId = "cat_" + Date.now();
-            menuData.categories.push({ id: catId, name: catName });
-            menuData.products[catId] = [];
-            input.value = "";
-        }
-
+        const catId = "cat_" + Date.now();
+        menuData.categories.push({ id: catId, name: catName });
+        menuData.products[catId] = [];
+        input.value = "";
         saveMenuToStorage();
     }
 
-    function editCategory(index) {
+    function editCategoryPrompt(index) {
         const cat = menuData.categories[index];
-        document.getElementById('admin-new-cat-name').value = cat.name;
-        document.getElementById('admin-cat-edit-index').value = index;
-        document.getElementById('admin-cat-submit-btn').innerText = "Güncelle";
-        document.getElementById('admin-cat-cancel-btn').style.display = "block";
-    }
-
-    function cancelCatEdit() {
-        document.getElementById('admin-new-cat-name').value = "";
-        document.getElementById('admin-cat-edit-index').value = "";
-        document.getElementById('admin-cat-submit-btn').innerText = "+ Ekle";
-        document.getElementById('admin-cat-cancel-btn').style.display = "none";
+        const newName = prompt("Kategori Adını Düzenleyin:", cat.name);
+        if (newName && newName.trim() !== "") {
+            menuData.categories[index].name = newName.trim();
+            saveMenuToStorage();
+        }
     }
 
     function deleteCategory(index) {
@@ -389,34 +372,14 @@
         
         let confirmMsg = `"${cat.name}" kategorisini silmek istediğinize emin misiniz?`;
         if (productCount > 0) {
-            confirmMsg = `⚠️ UYARI: "${cat.name}" kategorisi içinde ${productCount} adet ürün bulunuyor!\n\nKategoriyi silerseniz içindeki ürünler de silinecektir. Devam etmek istiyor musunuz?`;
+            confirmMsg = `⚠️ UYARI: "${cat.name}" kategorisinde ${productCount} adet ürün var!\n\nKategoriyi silerseniz ürünler de silinecektir. Devam edilsin mi?`;
         }
 
         if (confirm(confirmMsg)) {
             delete menuData.products[cat.id];
             menuData.categories.splice(index, 1);
-            cancelCatEdit();
             saveMenuToStorage();
         }
-    }
-
-    function renderAdminCategoryList() {
-        const catList = document.getElementById('admin-cat-list');
-        catList.innerHTML = "";
-        menuData.categories.forEach((cat, index) => {
-            const itemCount = (menuData.products[cat.id] || []).length;
-            catList.innerHTML += `
-                <div class="admin-item-row">
-                    <span><b>${index + 1}.</b> ${cat.name} <small style="color:var(--text-muted);">(${itemCount} ürün)</small></span>
-                    <div class="admin-actions">
-                        ${index > 0 ? `<button class="admin-btn-sm btn-move" onclick="moveCategory(${index}, -1)">⬆️</button>` : ''}
-                        ${index < menuData.categories.length - 1 ? `<button class="admin-btn-sm btn-move" onclick="moveCategory(${index}, 1)">⬇️</button>` : ''}
-                        <button class="admin-btn-sm btn-edit" onclick="editCategory(${index})">✏️</button>
-                        <button class="admin-btn-sm btn-del" onclick="deleteCategory(${index})">Sil</button>
-                    </div>
-                </div>
-            `;
-        });
     }
 
     function moveCategory(index, direction) {
@@ -430,22 +393,26 @@
         saveMenuToStorage();
     }
 
-    function handleLogoClick() {
-        logoClickCount++;
-        clearTimeout(logoClickTimer);
-        if (logoClickCount === 5) {
-            logoClickCount = 0;
-            const pass = prompt("Yönetici Şifresini Girin:");
-            if (pass === "1234") {
-                document.getElementById('modal-admin').style.display = 'flex';
-            } else if (pass !== null) {
-                alert("Hatalı Şifre!");
-            }
-        } else {
-            logoClickTimer = setTimeout(() => { logoClickCount = 0; }, 2000);
-        }
+    function renderAdminCategoryList() {
+        const catList = document.getElementById('admin-cat-list');
+        catList.innerHTML = "";
+        menuData.categories.forEach((cat, index) => {
+            const itemCount = (menuData.products[cat.id] || []).length;
+            catList.innerHTML += `
+                <div class="admin-item-row">
+                    <span><b>${index + 1}.</b> ${cat.name} <small style="color:var(--text-muted);">(${itemCount})</small></span>
+                    <div class="admin-actions">
+                        ${index > 0 ? `<button class="admin-btn-sm btn-move" onclick="moveCategory(${index}, -1)">⬆️</button>` : ''}
+                        ${index < menuData.categories.length - 1 ? `<button class="admin-btn-sm btn-move" onclick="moveCategory(${index}, 1)">⬇️</button>` : ''}
+                        <button class="admin-btn-sm btn-edit" onclick="editCategoryPrompt(${index})">✏️ Düzenle</button>
+                        <button class="admin-btn-sm btn-del" onclick="deleteCategory(${index})">Sil</button>
+                    </div>
+                </div>
+            `;
+        });
     }
 
+    /* ÜRÜN İŞLEMLERİ */
     function saveProduct() {
         const catId = document.getElementById('admin-cat-select').value;
         const name = document.getElementById('admin-p-name').value.trim();
@@ -522,10 +489,26 @@
     }
 
     function resetMenuToDefault() {
-        if (confirm("Tüm değişiklikler sıfırlanıp varsayılan tam menüye dönülecektir. Onaylıyor musunuz?")) {
-            localStorage.removeItem('venus_menu_v11');
+        if (confirm("Tüm değişiklikler sıfırlanıp varsayılan menüye dönülecektir. Onaylıyor musunuz?")) {
+            localStorage.removeItem('venus_menu_v12');
             menuData = DEFAULT_MENU;
             saveMenuToStorage();
+        }
+    }
+
+    function handleLogoClick() {
+        logoClickCount++;
+        clearTimeout(logoClickTimer);
+        if (logoClickCount === 5) {
+            logoClickCount = 0;
+            const pass = prompt("Yönetici Şifresini Girin:");
+            if (pass === "1234") {
+                document.getElementById('modal-admin').style.display = 'flex';
+            } else if (pass !== null) {
+                alert("Hatalı Şifre!");
+            }
+        } else {
+            logoClickTimer = setTimeout(() => { logoClickCount = 0; }, 2000);
         }
     }
 
