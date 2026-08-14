@@ -41,7 +41,7 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.2); font-weight: 600; line-height: 1.4;
         }
 
-        /* Navilasyon - Kategori Butonları */
+        /* Navigasyon - Kategori Butonları */
         .cat-nav { position: sticky; top: 0; background: rgba(15, 12, 32, 0.95); backdrop-filter: blur(10px); display: flex; overflow-x: auto; padding: 12px 15px; gap: 10px; border-bottom: 1px solid var(--border-color); z-index: 1000; scrollbar-width: none; }
         .cat-nav::-webkit-scrollbar { display: none; }
         .cat-item { 
@@ -168,10 +168,18 @@
         </div>
         <hr style="border:0; border-top:1px solid var(--border-color); margin:12px 0;">
 
-        <h4 style="margin:5px 0 10px;">📂 Kategori Sıralaması</h4>
+        <!-- KATEGORİ YÖNETİMİ -->
+        <h4 style="margin:5px 0 8px; color:#00f0ff;">📂 Kategori Yönetimi</h4>
+        <div style="display:flex; gap:8px; margin-bottom:10px;">
+            <input type="text" id="admin-new-cat-name" placeholder="Yeni Kategori Adı (Örn: 🍹 Kokteyller)" style="margin:0;">
+            <button onclick="addNewCategory()" style="background:#00c853; color:white; border:none; padding:0 15px; border-radius:12px; font-weight:700; cursor:pointer; white-space:nowrap;">+ Ekle</button>
+        </div>
         <div id="admin-cat-list" style="max-height: 140px; overflow-y: auto; background: #0f0c20; border: 1px solid var(--border-color); padding: 8px; border-radius: 12px;"></div>
 
-        <h4 style="margin:15px 0 10px;">➕ Ürün Ekle / Düzenle</h4>
+        <hr style="border:0; border-top:1px solid var(--border-color); margin:15px 0;">
+
+        <!-- ÜRÜN YÖNETİMİ -->
+        <h4 style="margin:5px 0 10px; color:#00f0ff;">➕ Ürün Ekle / Düzenle</h4>
         <input type="hidden" id="admin-edit-index">
         <select id="admin-cat-select"></select>
         <input type="text" id="admin-p-name" placeholder="Ürün Adı">
@@ -180,7 +188,7 @@
         <input type="text" id="admin-p-img" placeholder="Görsel Linki (Opsiyonel)">
         <button class="btn-admin" onclick="saveProduct()">Ürünü Kaydet</button>
 
-        <h4 style="margin:20px 0 10px;">📝 Ürün ve Stok Yönetimi</h4>
+        <h4 style="margin:20px 0 10px;">📝 Ürün ve Stok Listesi</h4>
         <div id="admin-product-list" style="max-height: 200px; overflow-y: auto;"></div>
 
         <button onclick="resetMenuToDefault()" style="background:#ff5252; color:white; border:none; padding:10px; border-radius:10px; width:100%; margin-top:15px; font-size:12px; font-weight:700; cursor:pointer;">Varsayılan Menüye Sıfırla</button>
@@ -279,14 +287,14 @@
         }
     };
 
-    let menuData = JSON.parse(localStorage.getItem('venus_menu_v8')) || DEFAULT_MENU;
+    let menuData = JSON.parse(localStorage.getItem('venus_menu_v9')) || DEFAULT_MENU;
     let cart = [];
     let tempItem = null;
     let logoClickCount = 0;
     let logoClickTimer = null;
 
     function saveMenuToStorage() {
-        localStorage.setItem('venus_menu_v8', JSON.stringify(menuData));
+        localStorage.setItem('venus_menu_v9', JSON.stringify(menuData));
         initUI();
     }
 
@@ -328,12 +336,34 @@
             container.innerHTML += `
                 <div class="section-box" id="section-${cat.id}">
                     <div class="section-title">${cat.name}</div>
-                    <div>${productsHTML || '<p style="font-size:12px; color:var(--text-muted); padding: 5px 8px;">Bu kategoride aktif ürün bulunmamaktadır.</p>'}</div>
+                    <div>${productsHTML || '<p style="font-size:12px; color:var(--text-muted); padding: 5px 8px;">Bu kategoride henüz ürün yok.</p>'}</div>
                 </div>
             `;
         });
         renderAdminCategoryList();
         renderAdminProductList();
+    }
+
+    function addNewCategory() {
+        const input = document.getElementById('admin-new-cat-name');
+        const catName = input.value.trim();
+        if (!catName) { alert("Lütfen geçerli bir kategori adı yazın!"); return; }
+
+        const catId = "cat_" + Date.now();
+        menuData.categories.push({ id: catId, name: catName });
+        menuData.products[catId] = [];
+
+        saveMenuToStorage();
+        input.value = "";
+    }
+
+    function deleteCategory(index) {
+        const cat = menuData.categories[index];
+        if (confirm(`"${cat.name}" kategorisini ve içindeki TÜM ürünleri silmek istediğinize emin misiniz?`)) {
+            delete menuData.products[cat.id];
+            menuData.categories.splice(index, 1);
+            saveMenuToStorage();
+        }
     }
 
     function renderAdminCategoryList() {
@@ -346,6 +376,7 @@
                     <div class="admin-actions">
                         ${index > 0 ? `<button class="admin-btn-sm btn-move" onclick="moveCategory(${index}, -1)">⬆️</button>` : ''}
                         ${index < menuData.categories.length - 1 ? `<button class="admin-btn-sm btn-move" onclick="moveCategory(${index}, 1)">⬇️</button>` : ''}
+                        <button class="admin-btn-sm btn-del" onclick="deleteCategory(${index})">Sil</button>
                     </div>
                 </div>
             `;
@@ -387,6 +418,7 @@
         const img = document.getElementById('admin-p-img').value.trim();
         const editIdx = document.getElementById('admin-edit-index').value;
 
+        if (!catId) { alert("Lütfen önce bir kategori ekleyin veya seçin!"); return; }
         if (!name || isNaN(price)) { alert("Lütfen ürün adı ve geçerli bir fiyat girin!"); return; }
 
         if (!menuData.products[catId]) menuData.products[catId] = [];
@@ -455,7 +487,7 @@
 
     function resetMenuToDefault() {
         if (confirm("Tüm değişiklikler sıfırlanıp varsayılan tam menüye dönülecektir. Onaylıyor musunuz?")) {
-            localStorage.removeItem('venus_menu_v8');
+            localStorage.removeItem('venus_menu_v9');
             menuData = DEFAULT_MENU;
             saveMenuToStorage();
         }
