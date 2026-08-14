@@ -169,12 +169,14 @@
         <hr style="border:0; border-top:1px solid var(--border-color); margin:12px 0;">
 
         <!-- KATEGORİ YÖNETİMİ -->
-        <h4 style="margin:5px 0 8px; color:#00f0ff;">📂 Kategori Ekle / Sil / Sırala</h4>
+        <h4 style="margin:5px 0 8px; color:#00f0ff;">📂 Kategori Ekle / Düzenle / Sırala</h4>
         <div style="display:flex; gap:8px; margin-bottom:10px;">
-            <input type="text" id="admin-new-cat-name" placeholder="Yeni Kategori Adı (Örn: 🍹 Nargileler)" style="margin:0;">
-            <button onclick="addNewCategory()" style="background:#00c853; color:white; border:none; padding:0 15px; border-radius:12px; font-weight:700; cursor:pointer; white-space:nowrap;">+ Ekle</button>
+            <input type="hidden" id="admin-cat-edit-index">
+            <input type="text" id="admin-new-cat-name" placeholder="Kategori Adı" style="margin:0;">
+            <button id="admin-cat-submit-btn" onclick="saveCategory()" style="background:#00c853; color:white; border:none; padding:0 15px; border-radius:12px; font-weight:700; cursor:pointer; white-space:nowrap;">+ Ekle</button>
+            <button id="admin-cat-cancel-btn" onclick="cancelCatEdit()" style="background:#555; color:white; border:none; padding:0 10px; border-radius:12px; font-weight:700; cursor:pointer; display:none;">İptal</button>
         </div>
-        <div id="admin-cat-list" style="max-height: 140px; overflow-y: auto; background: #0f0c20; border: 1px solid var(--border-color); padding: 8px; border-radius: 12px;"></div>
+        <div id="admin-cat-list" style="max-height: 150px; overflow-y: auto; background: #0f0c20; border: 1px solid var(--border-color); padding: 8px; border-radius: 12px;"></div>
 
         <hr style="border:0; border-top:1px solid var(--border-color); margin:15px 0;">
 
@@ -287,14 +289,14 @@
         }
     };
 
-    let menuData = JSON.parse(localStorage.getItem('venus_menu_v10')) || DEFAULT_MENU;
+    let menuData = JSON.parse(localStorage.getItem('venus_menu_v11')) || DEFAULT_MENU;
     let cart = [];
     let tempItem = null;
     let logoClickCount = 0;
     let logoClickTimer = null;
 
     function saveMenuToStorage() {
-        localStorage.setItem('venus_menu_v10', JSON.stringify(menuData));
+        localStorage.setItem('venus_menu_v11', JSON.stringify(menuData));
         initUI();
     }
 
@@ -344,24 +346,56 @@
         renderAdminProductList();
     }
 
-    function addNewCategory() {
+    function saveCategory() {
         const input = document.getElementById('admin-new-cat-name');
+        const editIdx = document.getElementById('admin-cat-edit-index').value;
         const catName = input.value.trim();
+        
         if (!catName) { alert("Lütfen bir kategori adı girin!"); return; }
 
-        const catId = "cat_" + Date.now();
-        menuData.categories.push({ id: catId, name: catName });
-        menuData.products[catId] = [];
+        if (editIdx !== "") {
+            // Kategori Adı Düzenleme
+            menuData.categories[editIdx].name = catName;
+            cancelCatEdit();
+        } else {
+            // Yeni Kategori Ekleme
+            const catId = "cat_" + Date.now();
+            menuData.categories.push({ id: catId, name: catName });
+            menuData.products[catId] = [];
+            input.value = "";
+        }
 
         saveMenuToStorage();
-        input.value = "";
+    }
+
+    function editCategory(index) {
+        const cat = menuData.categories[index];
+        document.getElementById('admin-new-cat-name').value = cat.name;
+        document.getElementById('admin-cat-edit-index').value = index;
+        document.getElementById('admin-cat-submit-btn').innerText = "Güncelle";
+        document.getElementById('admin-cat-cancel-btn').style.display = "block";
+    }
+
+    function cancelCatEdit() {
+        document.getElementById('admin-new-cat-name').value = "";
+        document.getElementById('admin-cat-edit-index').value = "";
+        document.getElementById('admin-cat-submit-btn').innerText = "+ Ekle";
+        document.getElementById('admin-cat-cancel-btn').style.display = "none";
     }
 
     function deleteCategory(index) {
         const cat = menuData.categories[index];
-        if (confirm(`"${cat.name}" kategorisini ve içindeki TÜM ürünleri silmek istediğinize emin misiniz?`)) {
+        const productCount = (menuData.products[cat.id] || []).length;
+        
+        let confirmMsg = `"${cat.name}" kategorisini silmek istediğinize emin misiniz?`;
+        if (productCount > 0) {
+            confirmMsg = `⚠️ UYARI: "${cat.name}" kategorisi içinde ${productCount} adet ürün bulunuyor!\n\nKategoriyi silerseniz içindeki ürünler de silinecektir. Devam etmek istiyor musunuz?`;
+        }
+
+        if (confirm(confirmMsg)) {
             delete menuData.products[cat.id];
             menuData.categories.splice(index, 1);
+            cancelCatEdit();
             saveMenuToStorage();
         }
     }
@@ -370,12 +404,14 @@
         const catList = document.getElementById('admin-cat-list');
         catList.innerHTML = "";
         menuData.categories.forEach((cat, index) => {
+            const itemCount = (menuData.products[cat.id] || []).length;
             catList.innerHTML += `
                 <div class="admin-item-row">
-                    <span><b>${index + 1}.</b> ${cat.name}</span>
+                    <span><b>${index + 1}.</b> ${cat.name} <small style="color:var(--text-muted);">(${itemCount} ürün)</small></span>
                     <div class="admin-actions">
                         ${index > 0 ? `<button class="admin-btn-sm btn-move" onclick="moveCategory(${index}, -1)">⬆️</button>` : ''}
                         ${index < menuData.categories.length - 1 ? `<button class="admin-btn-sm btn-move" onclick="moveCategory(${index}, 1)">⬇️</button>` : ''}
+                        <button class="admin-btn-sm btn-edit" onclick="editCategory(${index})">✏️</button>
                         <button class="admin-btn-sm btn-del" onclick="deleteCategory(${index})">Sil</button>
                     </div>
                 </div>
@@ -487,7 +523,7 @@
 
     function resetMenuToDefault() {
         if (confirm("Tüm değişiklikler sıfırlanıp varsayılan tam menüye dönülecektir. Onaylıyor musunuz?")) {
-            localStorage.removeItem('venus_menu_v10');
+            localStorage.removeItem('venus_menu_v11');
             menuData = DEFAULT_MENU;
             saveMenuToStorage();
         }
