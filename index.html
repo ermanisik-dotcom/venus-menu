@@ -45,7 +45,7 @@
     <header class="px-5 py-4 flex justify-between items-center max-w-md mx-auto">
         <div>
             <p id="logo-btn" onclick="handleLogoClick()" class="text-[11px] font-extrabold tracking-[0.2em] text-purple-400 uppercase select-none cursor-pointer">VENÜS BOWLING</p>
-            <h1 class="text-2xl font-bold tracking-tight mt-1 text-white">Merhaba, Ece!</h1>
+            <h1 class="text-2xl font-bold tracking-tight mt-1 text-white">Hoş Geldiniz!</h1>
         </div>
         <div class="w-10 h-10 rounded-full bg-[#15182e] border border-gray-800 flex items-center justify-center text-gray-300">
             <i class="fa-regular fa-user text-sm"></i>
@@ -56,7 +56,6 @@
 
         <!-- HERO BANNER -->
         <div class="relative rounded-[28px] overflow-hidden bg-card p-5 border border-white/10">
-            <!-- Arka Plan Görseli & Karartma -->
             <div class="absolute inset-0 bg-cover bg-center opacity-40" style="background-image: url('https://images.unsplash.com/photo-1538388149542-5e24932d11a8?q=80&w=800');"></div>
             <div class="absolute inset-0 bg-gradient-to-t from-[#080914] via-[#080914]/60 to-transparent"></div>
 
@@ -120,13 +119,24 @@
             </div>
         </div>
 
-        <!-- DİNAMİK MENÜ ALANI -->
-        <div id="dynamic-content-area" class="hidden bg-card p-4 rounded-3xl space-y-4">
+        <!-- DİNAMİK MENÜ / İÇERİK ALANI -->
+        <div id="dynamic-content-area" class="hidden bg-card p-4 rounded-3xl space-y-4 border border-white/10">
             <div class="flex justify-between items-center border-b border-gray-800 pb-3">
                 <h3 id="tab-title" class="font-bold text-lg text-purple-400">Detaylar</h3>
                 <button onclick="switchTab('home')" class="w-7 h-7 rounded-full bg-gray-800 flex items-center justify-center text-gray-400"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <div id="tab-content-body" class="space-y-3"></div>
+
+            <!-- Menü İçi Filtre Butonları (Sadece Menü Sekmesinde Görünür) -->
+            <div id="menu-categories" class="hidden flex gap-2 overflow-x-auto no-scrollbar pb-1">
+                <button onclick="filterMenu('Tümü')" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-purple-600 text-white whitespace-nowrap">Tümü</button>
+                <button onclick="filterMenu('Fast Food')" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-gray-800 text-gray-300 whitespace-nowrap">Fast Food</button>
+                <button onclick="filterMenu('Atıştırmalık')" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-gray-800 text-gray-300 whitespace-nowrap">Atıştırmalık</button>
+                <button onclick="filterMenu('Sıcak İçecek')" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-gray-800 text-gray-300 whitespace-nowrap">Sıcak İçecekler</button>
+                <button onclick="filterMenu('Soğuk İçecek')" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-gray-800 text-gray-300 whitespace-nowrap">Soğuk İçecekler</button>
+                <button onclick="filterMenu('Tatlı')" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-gray-800 text-gray-300 whitespace-nowrap">Tatlılar</button>
+            </div>
+
+            <div id="tab-content-body" class="space-y-2.5 max-h-[60vh] overflow-y-auto no-scrollbar"></div>
         </div>
 
     </main>
@@ -138,11 +148,11 @@
                 <i class="fa-solid fa-house text-lg"></i>
                 <span class="text-[10px] font-bold">Ana Sayfa</span>
             </button>
-            <button onclick="switchTab('bowling')" class="flex flex-col items-center gap-1 text-gray-500 hover:text-purple-400">
+            <button onclick="switchTab('bowling')" class="flex flex-col items-center gap-1 text-gray-400 hover:text-purple-400">
                 <i class="fa-solid fa-bullseye text-lg"></i>
                 <span class="text-[10px] font-medium">Bowling</span>
             </button>
-            <button onclick="switchTab('menu')" class="flex flex-col items-center gap-1 text-gray-500 hover:text-purple-400">
+            <button onclick="switchTab('menu')" class="flex flex-col items-center gap-1 text-gray-400 hover:text-purple-400">
                 <i class="fa-solid fa-utensils text-lg"></i>
                 <span class="text-[10px] font-medium">Menü</span>
             </button>
@@ -175,19 +185,37 @@
             <div class="space-y-2 text-xs">
                 <p class="font-bold text-gray-300">Yeni Kampanya Ekle</p>
                 <input id="input-camp-tag" type="text" placeholder="Etiket (Örn: HAFTA İÇİ)" class="w-full bg-gray-900 border border-gray-800 p-3 rounded-xl text-white">
-                <input id="input-camp-title" type="text" placeholder="Paket Adı (Örn: 2 Oyun + 1 İçecek)" class="w-full bg-gray-900 border border-gray-800 p-3 rounded-xl text-white">
-                <input id="input-camp-desc" type="text" placeholder="Detay (Örn: Pazartesi — Perşembe)" class="w-full bg-gray-900 border border-gray-800 p-3 rounded-xl text-white">
+                <input id="input-camp-title" type="text" placeholder="Paket Adı" class="w-full bg-gray-900 border border-gray-800 p-3 rounded-xl text-white">
+                <input id="input-camp-desc" type="text" placeholder="Detay" class="w-full bg-gray-900 border border-gray-800 p-3 rounded-xl text-white">
                 <input id="input-camp-price" type="text" placeholder="Fiyat (Örn: 349 ₺)" class="w-full bg-gray-900 border border-gray-800 p-3 rounded-xl text-white">
                 <button onclick="addCampaign()" class="w-full bg-purple-600 hover:bg-purple-700 p-3 rounded-xl font-bold text-white">Kampanya Ekle</button>
             </div>
 
-            <button onclick="saveAdminData()" class="w-full bg-purple-accent p-3.5 rounded-xl font-bold text-sm text-white mt-2">Tüm Değişiklikleri Kaydet</button>
+            <hr class="border-gray-800">
+
+            <!-- MENÜYE ÜRÜN EKLEME -->
+            <div class="space-y-2 text-xs">
+                <p class="font-bold text-gray-300">Menüye Yeni Ürün Ekle</p>
+                <select id="input-menu-cat" class="w-full bg-gray-900 border border-gray-800 p-3 rounded-xl text-white">
+                    <option value="Fast Food">Fast Food</option>
+                    <option value="Atıştırmalık">Atıştırmalık</option>
+                    <option value="Sıcak İçecek">Sıcak İçecek</option>
+                    <option value="Soğuk İçecek">Soğuk İçecek</option>
+                    <option value="Tatlı">Tatlı</option>
+                </select>
+                <input id="input-menu-name" type="text" placeholder="Ürün Adı" class="w-full bg-gray-900 border border-gray-800 p-3 rounded-xl text-white">
+                <input id="input-menu-desc" type="text" placeholder="Açıklama (İsteğe Bağlı)" class="w-full bg-gray-900 border border-gray-800 p-3 rounded-xl text-white">
+                <input id="input-menu-price" type="text" placeholder="Fiyat (Örn: 120 ₺)" class="w-full bg-gray-900 border border-gray-800 p-3 rounded-xl text-white">
+                <button onclick="addMenuItem()" class="w-full bg-amber-600 hover:bg-amber-700 p-3 rounded-xl font-bold text-white">Menüye Ekle</button>
+            </div>
+
+            <button onclick="saveAdminData()" class="w-full bg-purple-accent p-3.5 rounded-xl font-bold text-sm text-white mt-4">Tüm Değişiklikleri Kaydet</button>
         </div>
     </div>
 
     <!-- JAVASCRIPT KODLARI -->
     <script>
-        let defaultData = {
+        const initialData = {
             hero: {
                 badge: "Bu akşam için yerini kap",
                 title: "Bowling keyfi şimdi başlıyor!",
@@ -196,17 +224,55 @@
                 btnLink: "tel:05000000000"
             },
             campaigns: [
-                { id: 1, tag: "HAFTA İÇİ", tagColor: "text-purple-400", title: "2 Oyun + 1 İçecek", desc: "Pazartesi — Perşembe", price: "349 ₺" },
-                { id: 2, tag: "AİLE PAKETİ", tagColor: "text-emerald-400", title: "Aile Saati", desc: "4 kişi + patates", price: "1.190 ₺" }
+                { id: 1, tag: "HAFTA İÇİ", title: "2 Oyun + 1 İçecek", desc: "Pazartesi — Perşembe", price: "349 ₺" },
+                { id: 2, tag: "AİLE PAKETİ", title: "Aile Saati", desc: "4 kişi + patates cipsi", price: "1.190 ₺" },
+                { id: 3, tag: "ÖĞRENCİ", title: "Öğrenci Fırsatı", desc: "Hafta içi 12:00 - 17:00", price: "130 ₺" }
             ],
             menuItems: [
-                { category: "Sıcak İçecekler", name: "Türk Kahvesi", price: "60 ₺" },
-                { category: "Atıştırmalıklar", name: "Patates Tabağı", price: "120 ₺" },
-                { category: "Soğuk İçecekler", name: "Soft İçecekler", price: "50 ₺" }
+                // Fast Food
+                { category: "Fast Food", name: "Venüs Burger Menü", desc: "150gr dana köfte, patates, içecek", price: "240 ₺" },
+                { category: "Fast Food", name: "Cheeseburger", desc: "Cheddar peynirli özel soslu", price: "220 ₺" },
+                { category: "Fast Food", name: "Pizza Margherita", desc: "Özel domates sosu, mozzaella", price: "210 ₺" },
+                { category: "Fast Food", name: "Karışık Pizza", desc: "Sucuk, sosis, mantar, mısır, biber", price: "250 ₺" },
+                { category: "Fast Food", name: "Tost (Karışık)", desc: "Sucuk ve kaşar peynirli", price: "110 ₺" },
+
+                // Atıştırmalıklar
+                { category: "Atıştırmalık", name: "Patates Tabağı (Basket)", desc: "Özel baharatlı elma dilim", price: "120 ₺" },
+                { category: "Atıştırmalık", name: "Sosis Tabağı", desc: "Patates kızartması ve soslar ile", price: "150 ₺" },
+                { category: "Atıştırmalık", name: "Soğan Halkası (10'lu)", desc: "Çıtır soğan halkaları", price: "110 ₺" },
+                { category: "Atıştırmalık", name: "Çıtır Tavuk Sepeti", desc: "Paneli tavuk parçaları & patates", price: "190 ₺" },
+                { category: "Atıştırmalık", name: "Combo Sepet", desc: "Sosis, nuggets, soğan halkası, patates", price: "270 ₺" },
+
+                // Sıcak İçecekler
+                { category: "Sıcak İçecek", name: "Demleme Çay", desc: "Taze demlenmiş", price: "30 ₺" },
+                { category: "Sıcak İçecek", name: "Türk Kahvesi", desc: "Geleneksel orta/şekerli/sade", price: "65 ₺" },
+                { category: "Sıcak İçecek", name: "Double Türk Kahvesi", desc: "Dubleden gelen lezzet", price: "90 ₺" },
+                { category: "Sıcak İçecek", name: "Espresso", desc: "Yoğun aromalı", price: "70 ₺" },
+                { category: "Sıcak İçecek", name: "Americano", desc: "Sıcak su ile inceltilmiş espresso", price: "80 ₺" },
+                { category: "Sıcak İçecek", name: "Caffe Latte", desc: "Köpürtülmüş süt ve espresso", price: "95 ₺" },
+                { category: "Sıcak İçecek", name: "Cappuccino", desc: "Yoğun süt köpüklü", price: "95 ₺" },
+                { category: "Sıcak İçecek", name: "Bitki Çayları", desc: "Adaçayı, Yeşil Çay, Ihlamur, Kış Çayı", price: "75 ₺" },
+
+                // Soğuk İçecekler
+                { category: "Soğuk İçecek", name: "Coca-Cola / Fanta / Sprite", desc: "330ml kutu", price: "60 ₺" },
+                { category: "Soğuk İçecek", name: "Fuse Tea (Limon/Şeftali)", desc: "330ml kutu", price: "60 ₺" },
+                { category: "Soğuk İçecek", name: "Cappy Meyve Suyu", desc: "Karışık, Şeftali, Vişne", price: "60 ₺" },
+                { category: "Soğuk İçecek", name: "Ayran", desc: "200ml cam şişe", price: "40 ₺" },
+                { category: "Soğuk İçecek", name: "Red Bull Energy Drink", desc: "250ml", price: "100 ₺" },
+                { category: "Soğuk İçecek", name: "Iced Latte", desc: "Soğuk süt, espresso ve buz", price: "110 ₺" },
+                { category: "Soğuk İçecek", name: "Churchill", desc: "Taze limon suyu, soda, tuz", price: "65 ₺" },
+                { category: "Soğuk İçecek", name: "Maden Suyu", desc: "Sade soda", price: "35 ₺" },
+                { category: "Soğuk İçecek", name: "Su", desc: "0.5l pet şişe", price: "20 ₺" },
+
+                // Tatlılar
+                { category: "Tatlı", name: "Belçika Çikolatalı Waffle", desc: "Taze meyveler ve çikolata ile", price: "180 ₺" },
+                { category: "Tatlı", name: "Sıcak Sufle", desc: "Vanilyalı dondurma ile servis edilir", price: "150 ₺" },
+                { category: "Tatlı", name: "San Sebastian Cheesecake", desc: "Eritilmiş çikolata sosu ile", price: "160 ₺" }
             ]
         };
 
-        let appData = JSON.parse(localStorage.getItem('venus_app_data_v2')) || defaultData;
+        // Veriyi çek veya default yükle
+        let appData = JSON.parse(localStorage.getItem('venus_app_data_v3')) || initialData;
 
         function renderApp() {
             document.getElementById('hero-badge').innerText = appData.hero.badge;
@@ -224,14 +290,14 @@
                         <div>
                             <div class="flex justify-between items-center">
                                 <span class="text-[11px] font-extrabold ${tagClass} tracking-wider uppercase">${c.tag}</span>
-                                <i class="fa-solid fa-party-horn text-amber-400 text-sm"></i>
+                                <i class="fa-solid fa-fire text-amber-400 text-sm"></i>
                             </div>
                             <h4 class="font-bold text-lg mt-2 text-white leading-snug">${c.title}</h4>
                             <p class="text-xs text-gray-400 mt-1">${c.desc}</p>
                         </div>
                         <div class="flex justify-between items-end mt-6">
                             <div>
-                                <span class="text-[10px] text-gray-400 block font-medium">Kişi başı</span>
+                                <span class="text-[10px] text-gray-400 block font-medium">Fiyat</span>
                                 <span class="text-xl font-extrabold text-white">${c.price}</span>
                             </div>
                             <a href="${appData.hero.btnLink}" class="w-10 h-10 rounded-2xl bg-purple-accent text-white flex items-center justify-center text-sm shadow-lg">
@@ -246,7 +312,7 @@
         function switchTab(tab) {
             const contentArea = document.getElementById('dynamic-content-area');
             const tabTitle = document.getElementById('tab-title');
-            const tabBody = document.getElementById('tab-content-body');
+            const menuCats = document.getElementById('menu-categories');
 
             if (tab === 'home') {
                 contentArea.classList.add('hidden');
@@ -254,34 +320,75 @@
             }
 
             contentArea.classList.remove('hidden');
-            tabBody.innerHTML = '';
+            menuCats.classList.add('hidden');
 
             if (tab === 'bowling') {
-                tabTitle.innerText = "Bowling Fiyatları";
-                tabBody.innerHTML = `
-                    <div class="flex justify-between p-3.5 bg-gray-900/60 rounded-2xl text-sm"><span>1 Oyun (Sivil)</span><span class="font-bold text-purple-400">180 ₺</span></div>
-                    <div class="flex justify-between p-3.5 bg-gray-900/60 rounded-2xl text-sm"><span>1 Oyun (Öğrenci)</span><span class="font-bold text-purple-400">150 ₺</span></div>
+                tabTitle.innerText = "Bowling Tarifeleri";
+                document.getElementById('tab-content-body').innerHTML = `
+                    <div class="flex justify-between items-center p-4 bg-gray-900/60 rounded-2xl border border-white/5">
+                        <div>
+                            <p class="font-bold text-white text-sm">Hafta İçi - 1 Oyun (Kişi Başı)</p>
+                            <p class="text-xs text-gray-400">Pazartesi — Perşembe</p>
+                        </div>
+                        <span class="font-black text-purple-400 text-base">180 ₺</span>
+                    </div>
+                    <div class="flex justify-between items-center p-4 bg-gray-900/60 rounded-2xl border border-white/5">
+                        <div>
+                            <p class="font-bold text-white text-sm">Hafta Sonu - 1 Oyun (Kişi Başı)</p>
+                            <p class="text-xs text-gray-400">Cuma — Pazar ve Resmi Tatiller</p>
+                        </div>
+                        <span class="font-black text-purple-400 text-base">220 ₺</span>
+                    </div>
+                    <div class="flex justify-between items-center p-4 bg-gray-900/60 rounded-2xl border border-purple-500/20 bg-purple-500/5">
+                        <div>
+                            <p class="font-bold text-purple-300 text-sm">Öğrenci Tarifesi (1 Oyun)</p>
+                            <p class="text-xs text-purple-300/70">Öğrenci kimliği ibrazı ile</p>
+                        </div>
+                        <span class="font-black text-purple-400 text-base">150 ₺</span>
+                    </div>
                 `;
             } else if (tab === 'menu') {
                 tabTitle.innerText = "Cafe & Menü";
-                appData.menuItems.forEach(m => {
-                    tabBody.innerHTML += `
-                        <div class="flex justify-between p-3.5 bg-gray-900/60 rounded-2xl text-sm">
-                            <span>${m.name}</span>
-                            <span class="font-bold text-amber-400">${m.price}</span>
-                        </div>
-                    `;
-                });
+                menuCats.classList.remove('hidden');
+                filterMenu('Tümü');
             } else if (tab === 'kampanya') {
                 tabTitle.innerText = "Kampanyalar";
-                tabBody.innerHTML = "<p class='text-xs text-gray-400'>Yukarıdaki kartları sağa kaydırarak tüm kampanyaları inceleyebilirsiniz.</p>";
+                document.getElementById('tab-content-body').innerHTML = "<p class='text-xs text-gray-400 text-center py-4'>Aktif tüm kampanyalarımızı yukarıdaki kart kaydırma alanından inceleyebilirsiniz.</p>";
             } else if (tab === 'etkinlik') {
-                tabTitle.innerText = "Etkinlikler";
-                tabBody.innerHTML = "<p class='text-xs text-gray-400'>Turnuva tarihleri yakında açıklanacaktır.</p>";
+                tabTitle.innerText = "Etkinlik & Turnuvalar";
+                document.getElementById('tab-content-body').innerHTML = `
+                    <div class="p-4 bg-gray-900/60 rounded-2xl space-y-1">
+                        <span class="text-[10px] bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-md font-bold">YAKINDA</span>
+                        <h4 class="font-bold text-white text-sm">Geleneksel Bowling Turnuvası</h4>
+                        <p class="text-xs text-gray-400">Dereceye girenlere özel ödüller ve kupa. Başvurular çok yakında resepsiyonda!</p>
+                    </div>
+                `;
             }
         }
 
-        // 5 TIK YÖNETİCİ MODU
+        function filterMenu(category) {
+            const body = document.getElementById('tab-content-body');
+            body.innerHTML = '';
+
+            let filtered = appData.menuItems;
+            if (category !== 'Tümü') {
+                filtered = appData.menuItems.filter(item => item.category === category);
+            }
+
+            filtered.forEach(m => {
+                body.innerHTML += `
+                    <div class="flex justify-between items-center p-3.5 bg-gray-900/50 rounded-2xl border border-white/5 hover:border-purple-500/30 transition-colors">
+                        <div>
+                            <p class="font-semibold text-white text-sm">${m.name}</p>
+                            ${m.desc ? `<p class="text-[11px] text-gray-400 mt-0.5">${m.desc}</p>` : ''}
+                        </div>
+                        <span class="font-bold text-amber-400 text-sm whitespace-nowrap ml-3">${m.price}</span>
+                    </div>
+                `;
+            });
+        }
+
+        // YÖNETİCİ MODU (5 TIK)
         let clickCount = 0;
         let clickTimer;
         function handleLogoClick() {
@@ -322,6 +429,21 @@
             }
         }
 
+        function addMenuItem() {
+            const category = document.getElementById('input-menu-cat').value;
+            const name = document.getElementById('input-menu-name').value;
+            const desc = document.getElementById('input-menu-desc').value;
+            const price = document.getElementById('input-menu-price').value;
+
+            if (name && price) {
+                appData.menuItems.push({ category, name, desc, price });
+                alert("Menü ürünü eklendi!");
+                document.getElementById('input-menu-name').value = '';
+                document.getElementById('input-menu-desc').value = '';
+                document.getElementById('input-menu-price').value = '';
+            }
+        }
+
         function saveAdminData() {
             appData.hero.badge = document.getElementById('input-badge').value;
             appData.hero.title = document.getElementById('input-title').value;
@@ -329,10 +451,10 @@
             appData.hero.btnText = document.getElementById('input-btn-text').value;
             appData.hero.btnLink = document.getElementById('input-btn-link').value;
 
-            localStorage.setItem('venus_app_data_v2', JSON.stringify(appData));
+            localStorage.setItem('venus_app_data_v3', JSON.stringify(appData));
             renderApp();
             closeAdmin();
-            alert("Tüm değişiklikler kaydedildi!");
+            alert("Değişiklikler başarıyla kaydedildi!");
         }
 
         renderApp();
