@@ -2,28 +2,34 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Venüs Bowling & Cafe</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Venüs Bowling</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+        
         body {
-            background-color: #0b0d17;
+            background-color: #080914;
             color: #ffffff;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
             -webkit-tap-highlight-color: transparent;
         }
-        .purple-gradient-btn {
-            background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
-        }
-        .purple-gradient-btn:active {
-            transform: scale(0.98);
-        }
-        .glass-card {
-            background: rgba(22, 27, 46, 0.7);
+
+        .bg-card {
+            background-color: rgba(18, 20, 38, 0.75);
             border: 1px solid rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(12px);
         }
+
+        .bg-purple-accent {
+            background-color: #7c4dff;
+        }
+
+        .bg-purple-accent:active {
+            opacity: 0.9;
+            transform: scale(0.99);
+        }
+
         .no-scrollbar::-webkit-scrollbar {
             display: none;
         }
@@ -33,34 +39,37 @@
         }
     </style>
 </head>
-<body class="pb-24">
+<body class="pb-28 pt-2">
 
-    <!-- HEADER / ÜST KISIM -->
-    <header class="p-5 flex justify-between items-center max-w-md mx-auto">
+    <!-- HEADER -->
+    <header class="px-5 py-4 flex justify-between items-center max-w-md mx-auto">
         <div>
-            <p id="logo-btn" onclick="handleLogoClick()" class="text-xs font-bold tracking-widest text-purple-400 uppercase select-none cursor-pointer">VENÜS BOWLING</p>
-            <h1 class="text-2xl font-black tracking-tight mt-0.5">Merhaba, Hoş Geldiniz!</h1>
+            <p id="logo-btn" onclick="handleLogoClick()" class="text-[11px] font-extrabold tracking-[0.2em] text-purple-400 uppercase select-none cursor-pointer">VENÜS BOWLING</p>
+            <h1 class="text-2xl font-bold tracking-tight mt-1 text-white">Merhaba, Ece!</h1>
         </div>
-        <div class="w-10 h-10 rounded-full bg-gray-800 border border-gray-700 flex items-center justify-center text-gray-300">
-            <i class="fa-solid fa-user"></i>
+        <div class="w-10 h-10 rounded-full bg-[#15182e] border border-gray-800 flex items-center justify-center text-gray-300">
+            <i class="fa-regular fa-user text-sm"></i>
         </div>
     </header>
 
     <main class="max-w-md mx-auto px-4 space-y-6">
 
-        <!-- HERO BANNER (PİST REZERVASYON) -->
-        <div class="relative rounded-3xl overflow-hidden glass-card p-5 border border-purple-900/40">
-            <div class="absolute inset-0 bg-cover bg-center opacity-30" style="background-image: url('https://images.unsplash.com/photo-1538388149542-5e24932d11a8?q=80&w=800');"></div>
+        <!-- HERO BANNER -->
+        <div class="relative rounded-[28px] overflow-hidden bg-card p-5 border border-white/10">
+            <!-- Arka Plan Görseli & Karartma -->
+            <div class="absolute inset-0 bg-cover bg-center opacity-40" style="background-image: url('https://images.unsplash.com/photo-1538388149542-5e24932d11a8?q=80&w=800');"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-[#080914] via-[#080914]/60 to-transparent"></div>
+
             <div class="relative z-10 space-y-3">
-                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-black/60 backdrop-blur-md text-emerald-400 border border-emerald-500/30">
-                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                    <span id="hero-badge">Bu akşam için yerini kap</span>
+                <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[11px] font-medium bg-black/50 backdrop-blur-md text-white border border-white/10">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span id="hero-badge" class="text-gray-200">Bu akşam için yerini kap</span>
                 </span>
                 
-                <h2 id="hero-title" class="text-2xl font-black leading-tight">Bowling keyfi şimdi başlıyor!</h2>
+                <h2 id="hero-title" class="text-2xl font-black leading-tight text-white tracking-wide">Bowling keyfi şimdi başlıyor!</h2>
                 <p id="hero-sub" class="text-xs text-gray-300">Bugün 18.00 sonrası pistler hızla doluyor.</p>
                 
-                <a id="hero-btn-link" href="tel:05000000000" class="purple-gradient-btn w-full py-3.5 px-5 rounded-2xl font-bold flex items-center justify-center gap-2 shadow-lg shadow-purple-900/40 text-sm mt-2 transition-all">
+                <a id="hero-btn-link" href="tel:05000000000" class="bg-purple-accent w-full py-4 px-5 rounded-2xl font-bold flex items-center justify-center gap-2 text-white text-sm mt-3 transition-transform">
                     <span id="hero-btn-text">Pistini Ayırt</span>
                     <i class="fa-solid fa-arrow-right text-xs"></i>
                 </a>
@@ -69,72 +78,71 @@
 
         <!-- HIZLI ERİŞİM KATEGORİLERİ -->
         <div class="grid grid-cols-4 gap-2.5">
-            <button onclick="switchTab('bowling')" class="glass-card p-3 rounded-2xl flex flex-col items-center justify-center gap-2 hover:border-purple-500/50 transition-all">
-                <div class="w-10 h-10 rounded-xl bg-purple-600/20 text-purple-400 flex items-center justify-center text-lg">
-                    <i class="fa-solid fa-bowling-ball"></i>
+            <button onclick="switchTab('bowling')" class="bg-card p-3 rounded-2xl flex flex-col items-center justify-center gap-2 border border-purple-500/50">
+                <div class="w-12 h-12 rounded-2xl bg-purple-600/30 text-purple-300 flex items-center justify-center text-xl">
+                    <i class="fa-solid fa-bullseye"></i>
                 </div>
-                <span class="text-xs font-semibold text-gray-200">Bowling</span>
+                <span class="text-xs font-semibold text-purple-300">Bowling</span>
             </button>
-            <button onclick="switchTab('menu')" class="glass-card p-3 rounded-2xl flex flex-col items-center justify-center gap-2 hover:border-purple-500/50 transition-all">
-                <div class="w-10 h-10 rounded-xl bg-amber-600/20 text-amber-400 flex items-center justify-center text-lg">
+            <button onclick="switchTab('menu')" class="bg-card p-3 rounded-2xl flex flex-col items-center justify-center gap-2 border border-white/5">
+                <div class="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-500 flex items-center justify-center text-xl">
                     <i class="fa-solid fa-utensils"></i>
                 </div>
-                <span class="text-xs font-semibold text-gray-200">Cafe & Menü</span>
+                <span class="text-xs font-semibold text-gray-300">Cafe & Menü</span>
             </button>
-            <button onclick="switchTab('kampanya')" class="glass-card p-3 rounded-2xl flex flex-col items-center justify-center gap-2 hover:border-purple-500/50 transition-all">
-                <div class="w-10 h-10 rounded-xl bg-blue-600/20 text-blue-400 flex items-center justify-center text-lg">
+            <button onclick="switchTab('kampanya')" class="bg-card p-3 rounded-2xl flex flex-col items-center justify-center gap-2 border border-white/5">
+                <div class="w-12 h-12 rounded-2xl bg-sky-500/10 text-sky-400 flex items-center justify-center text-xl">
                     <i class="fa-solid fa-percent"></i>
                 </div>
-                <span class="text-xs font-semibold text-gray-200">Kampanyalar</span>
+                <span class="text-xs font-semibold text-gray-300">Kampanyalar</span>
             </button>
-            <button onclick="switchTab('etkinlik')" class="glass-card p-3 rounded-2xl flex flex-col items-center justify-center gap-2 hover:border-purple-500/50 transition-all">
-                <div class="w-10 h-10 rounded-xl bg-emerald-600/20 text-emerald-400 flex items-center justify-center text-lg">
-                    <i class="fa-solid fa-calendar-days"></i>
+            <button onclick="switchTab('etkinlik')" class="bg-card p-3 rounded-2xl flex flex-col items-center justify-center gap-2 border border-white/5">
+                <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-xl">
+                    <i class="fa-regular fa-calendar text-xl"></i>
                 </div>
-                <span class="text-xs font-semibold text-gray-200">Etkinlikler</span>
+                <span class="text-xs font-semibold text-gray-300">Etkinlikler</span>
             </button>
         </div>
 
         <!-- BUGÜNÜN KAMPANYALARI -->
         <div id="section-kampanyalar" class="space-y-3">
-            <div class="flex justify-between items-end">
+            <div class="flex justify-between items-end px-1">
                 <div>
-                    <h3 class="font-bold text-lg">Bugünün Kampanyaları</h3>
+                    <h3 class="font-bold text-xl text-white">Bugünün Kampanyaları</h3>
                     <p class="text-xs text-gray-400">Geceye özel fırsatlar</p>
                 </div>
+                <button onclick="switchTab('kampanya')" class="text-xs font-semibold text-purple-400 flex items-center gap-1">Tümü <i class="fa-solid fa-chevron-right text-[10px]"></i></button>
             </div>
 
             <!-- Yatay Kaydırılabilir Kartlar -->
             <div id="campaigns-container" class="flex gap-3 overflow-x-auto no-scrollbar pb-2">
-                <!-- JS ile dinamik dolacak -->
+                <!-- JS ile dinamik doli -->
             </div>
         </div>
 
-        <!-- MENÜ / DİĞER İÇERİK ALANI -->
-        <div id="dynamic-content-area" class="hidden glass-card p-4 rounded-2xl space-y-4">
-            <div class="flex justify-between items-center border-b border-gray-800 pb-2">
+        <!-- DİNAMİK MENÜ ALANI -->
+        <div id="dynamic-content-area" class="hidden bg-card p-4 rounded-3xl space-y-4">
+            <div class="flex justify-between items-center border-b border-gray-800 pb-3">
                 <h3 id="tab-title" class="font-bold text-lg text-purple-400">Detaylar</h3>
-                <button onclick="switchTab('home')" class="text-xs text-gray-400"><i class="fa-solid fa-xmark text-base"></i></button>
+                <button onclick="switchTab('home')" class="w-7 h-7 rounded-full bg-gray-800 flex items-center justify-center text-gray-400"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <div id="tab-content-body" class="space-y-3">
-                <!-- Dinamik içerik buraya yüklenecek -->
-            </div>
+            <div id="tab-content-body" class="space-y-3"></div>
         </div>
 
     </main>
 
     <!-- ALT SABİT NAVİGASYON (BOTTOM BAR) -->
-    <nav class="fixed bottom-0 left-0 right-0 bg-[#0b0d17]/90 backdrop-blur-lg border-t border-gray-800/80 px-6 py-3 max-w-md mx-auto z-40">
-        <div class="flex justify-around items-center">
-            <button onclick="switchTab('home')" class="flex flex-col items-center gap-1 text-purple-500">
+    <nav class="fixed bottom-0 left-0 right-0 bg-[#080914]/95 backdrop-blur-xl border-t border-white/5 px-8 py-3 max-w-md mx-auto z-40">
+        <div class="flex justify-between items-center">
+            <button onclick="switchTab('home')" class="flex flex-col items-center gap-1 text-purple-400">
                 <i class="fa-solid fa-house text-lg"></i>
-                <span class="text-[10px] font-medium">Ana Sayfa</span>
+                <span class="text-[10px] font-bold">Ana Sayfa</span>
             </button>
-            <button onclick="switchTab('bowling')" class="flex flex-col items-center gap-1 text-gray-400 hover:text-purple-400">
-                <i class="fa-solid fa-bowling-ball text-lg"></i>
+            <button onclick="switchTab('bowling')" class="flex flex-col items-center gap-1 text-gray-500 hover:text-purple-400">
+                <i class="fa-solid fa-bullseye text-lg"></i>
                 <span class="text-[10px] font-medium">Bowling</span>
             </button>
-            <button onclick="switchTab('menu')" class="flex flex-col items-center gap-1 text-gray-400 hover:text-purple-400">
+            <button onclick="switchTab('menu')" class="flex flex-col items-center gap-1 text-gray-500 hover:text-purple-400">
                 <i class="fa-solid fa-utensils text-lg"></i>
                 <span class="text-[10px] font-medium">Menü</span>
             </button>
@@ -143,7 +151,7 @@
 
     <!-- YÖNETİCİ PANELİ MODALI -->
     <div id="admin-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-[#161b2e] border border-purple-500/30 w-full max-w-sm rounded-3xl p-5 space-y-4 max-h-[85vh] overflow-y-auto no-scrollbar">
+        <div class="bg-[#121426] border border-purple-500/30 w-full max-w-sm rounded-3xl p-5 space-y-4 max-h-[85vh] overflow-y-auto no-scrollbar">
             <div class="flex justify-between items-center border-b border-gray-800 pb-3">
                 <h3 class="font-bold text-purple-400 flex items-center gap-2">
                     <i class="fa-solid fa-gear"></i> Yönetici Paneli
@@ -154,11 +162,11 @@
             <!-- BANNER DÜZENLEME -->
             <div class="space-y-2 text-xs">
                 <p class="font-bold text-gray-300">Manşet (Hero) Ayarları</p>
-                <input id="input-badge" type="text" placeholder="Rozet Metni" class="w-full bg-gray-900 border border-gray-700 p-2.5 rounded-xl text-white">
-                <input id="input-title" type="text" placeholder="Manşet Başlığı" class="w-full bg-gray-900 border border-gray-700 p-2.5 rounded-xl text-white">
-                <input id="input-sub" type="text" placeholder="Alt Metin" class="w-full bg-gray-900 border border-gray-700 p-2.5 rounded-xl text-white">
-                <input id="input-btn-text" type="text" placeholder="Buton Metni" class="w-full bg-gray-900 border border-gray-700 p-2.5 rounded-xl text-white">
-                <input id="input-btn-link" type="text" placeholder="Buton Linki (Tel/WhatsApp)" class="w-full bg-gray-900 border border-gray-700 p-2.5 rounded-xl text-white">
+                <input id="input-badge" type="text" placeholder="Rozet Metni" class="w-full bg-gray-900 border border-gray-800 p-3 rounded-xl text-white">
+                <input id="input-title" type="text" placeholder="Manşet Başlığı" class="w-full bg-gray-900 border border-gray-800 p-3 rounded-xl text-white">
+                <input id="input-sub" type="text" placeholder="Alt Metin" class="w-full bg-gray-900 border border-gray-800 p-3 rounded-xl text-white">
+                <input id="input-btn-text" type="text" placeholder="Buton Metni" class="w-full bg-gray-900 border border-gray-800 p-3 rounded-xl text-white">
+                <input id="input-btn-link" type="text" placeholder="Buton Linki (Tel/WhatsApp)" class="w-full bg-gray-900 border border-gray-800 p-3 rounded-xl text-white">
             </div>
 
             <hr class="border-gray-800">
@@ -166,20 +174,19 @@
             <!-- YENİ KAMPANYA EKLEME -->
             <div class="space-y-2 text-xs">
                 <p class="font-bold text-gray-300">Yeni Kampanya Ekle</p>
-                <input id="input-camp-tag" type="text" placeholder="Etiket (Örn: HAFTA İÇİ)" class="w-full bg-gray-900 border border-gray-700 p-2.5 rounded-xl text-white">
-                <input id="input-camp-title" type="text" placeholder="Paket Adı (Örn: 2 Oyun + 1 İçecek)" class="w-full bg-gray-900 border border-gray-700 p-2.5 rounded-xl text-white">
-                <input id="input-camp-desc" type="text" placeholder="Detay (Örn: Pazartesi - Perşembe)" class="w-full bg-gray-900 border border-gray-700 p-2.5 rounded-xl text-white">
-                <input id="input-camp-price" type="text" placeholder="Fiyat (Örn: 349 ₺)" class="w-full bg-gray-900 border border-gray-700 p-2.5 rounded-xl text-white">
-                <button onclick="addCampaign()" class="w-full bg-purple-600 hover:bg-purple-700 py-2 rounded-xl font-bold text-white">Kampanya Ekle</button>
+                <input id="input-camp-tag" type="text" placeholder="Etiket (Örn: HAFTA İÇİ)" class="w-full bg-gray-900 border border-gray-800 p-3 rounded-xl text-white">
+                <input id="input-camp-title" type="text" placeholder="Paket Adı (Örn: 2 Oyun + 1 İçecek)" class="w-full bg-gray-900 border border-gray-800 p-3 rounded-xl text-white">
+                <input id="input-camp-desc" type="text" placeholder="Detay (Örn: Pazartesi — Perşembe)" class="w-full bg-gray-900 border border-gray-800 p-3 rounded-xl text-white">
+                <input id="input-camp-price" type="text" placeholder="Fiyat (Örn: 349 ₺)" class="w-full bg-gray-900 border border-gray-800 p-3 rounded-xl text-white">
+                <button onclick="addCampaign()" class="w-full bg-purple-600 hover:bg-purple-700 p-3 rounded-xl font-bold text-white">Kampanya Ekle</button>
             </div>
 
-            <button onclick="saveAdminData()" class="w-full purple-gradient-btn py-3 rounded-xl font-bold text-sm shadow-lg text-white">Tüm Değişiklikleri Kaydet</button>
+            <button onclick="saveAdminData()" class="w-full bg-purple-accent p-3.5 rounded-xl font-bold text-sm text-white mt-2">Tüm Değişiklikleri Kaydet</button>
         </div>
     </div>
 
     <!-- JAVASCRIPT KODLARI -->
     <script>
-        // Varsayılan Veriler
         let defaultData = {
             hero: {
                 badge: "Bu akşam için yerini kap",
@@ -189,8 +196,8 @@
                 btnLink: "tel:05000000000"
             },
             campaigns: [
-                { id: 1, tag: "HAFTA İÇİ", title: "2 Oyun + 1 İçecek", desc: "Pazartesi — Perşembe", price: "349 ₺" },
-                { id: 2, tag: "AİLE PAKETİ", title: "Aile Saati (4 Kişi)", desc: "4 kişi + patates & içecek", price: "1.190 ₺" }
+                { id: 1, tag: "HAFTA İÇİ", tagColor: "text-purple-400", title: "2 Oyun + 1 İçecek", desc: "Pazartesi — Perşembe", price: "349 ₺" },
+                { id: 2, tag: "AİLE PAKETİ", tagColor: "text-emerald-400", title: "Aile Saati", desc: "4 kişi + patates", price: "1.190 ₺" }
             ],
             menuItems: [
                 { category: "Sıcak İçecekler", name: "Türk Kahvesi", price: "60 ₺" },
@@ -199,34 +206,35 @@
             ]
         };
 
-        // Veriyi Yükle
-        let appData = JSON.parse(localStorage.getItem('venus_app_data')) || defaultData;
+        let appData = JSON.parse(localStorage.getItem('venus_app_data_v2')) || defaultData;
 
         function renderApp() {
-            // Hero Güncelleme
             document.getElementById('hero-badge').innerText = appData.hero.badge;
             document.getElementById('hero-title').innerText = appData.hero.title;
             document.getElementById('hero-sub').innerText = appData.hero.sub;
             document.getElementById('hero-btn-text').innerText = appData.hero.btnText;
             document.getElementById('hero-btn-link').href = appData.hero.btnLink;
 
-            // Kampanyaları Güncelleme
             const campContainer = document.getElementById('campaigns-container');
             campContainer.innerHTML = '';
-            appData.campaigns.forEach(c => {
+            appData.campaigns.forEach((c, index) => {
+                const tagClass = index % 2 === 0 ? "text-purple-400" : "text-emerald-400";
                 campContainer.innerHTML += `
-                    <div class="min-w-[240px] glass-card p-4 rounded-2xl flex flex-col justify-between relative border border-purple-900/30">
+                    <div class="min-w-[260px] bg-card p-5 rounded-[24px] flex flex-col justify-between border border-white/5 relative">
                         <div>
-                            <span class="text-[10px] font-bold text-purple-400 tracking-wider uppercase">${c.tag}</span>
-                            <h4 class="font-bold text-base mt-1 text-white">${c.title}</h4>
-                            <p class="text-xs text-gray-400 mt-0.5">${c.desc}</p>
-                        </div>
-                        <div class="flex justify-between items-end mt-4">
-                            <div>
-                                <span class="text-[10px] text-gray-400 block">Paket fiyatı</span>
-                                <span class="text-lg font-black text-white">${c.price}</span>
+                            <div class="flex justify-between items-center">
+                                <span class="text-[11px] font-extrabold ${tagClass} tracking-wider uppercase">${c.tag}</span>
+                                <i class="fa-solid fa-party-horn text-amber-400 text-sm"></i>
                             </div>
-                            <a href="${appData.hero.btnLink}" class="w-8 h-8 rounded-xl bg-purple-600/30 text-purple-300 flex items-center justify-center text-xs">
+                            <h4 class="font-bold text-lg mt-2 text-white leading-snug">${c.title}</h4>
+                            <p class="text-xs text-gray-400 mt-1">${c.desc}</p>
+                        </div>
+                        <div class="flex justify-between items-end mt-6">
+                            <div>
+                                <span class="text-[10px] text-gray-400 block font-medium">Kişi başı</span>
+                                <span class="text-xl font-extrabold text-white">${c.price}</span>
+                            </div>
+                            <a href="${appData.hero.btnLink}" class="w-10 h-10 rounded-2xl bg-purple-accent text-white flex items-center justify-center text-sm shadow-lg">
                                 <i class="fa-solid fa-arrow-up-right-from-square"></i>
                             </a>
                         </div>
@@ -235,7 +243,6 @@
             });
         }
 
-        // TAB GEÇİŞLERİ
         function switchTab(tab) {
             const contentArea = document.getElementById('dynamic-content-area');
             const tabTitle = document.getElementById('tab-title');
@@ -250,31 +257,31 @@
             tabBody.innerHTML = '';
 
             if (tab === 'bowling') {
-                tabTitle.innerText = "Bowling Fiyat Listesi";
+                tabTitle.innerText = "Bowling Fiyatları";
                 tabBody.innerHTML = `
-                    <div class="flex justify-between p-3 bg-gray-900/50 rounded-xl text-sm"><span>1 Oyun (Kişi Başı)</span><span class="font-bold text-purple-400">180 ₺</span></div>
-                    <div class="flex justify-between p-3 bg-gray-900/50 rounded-xl text-sm"><span>Student / Öğrenci</span><span class="font-bold text-purple-400">150 ₺</span></div>
+                    <div class="flex justify-between p-3.5 bg-gray-900/60 rounded-2xl text-sm"><span>1 Oyun (Sivil)</span><span class="font-bold text-purple-400">180 ₺</span></div>
+                    <div class="flex justify-between p-3.5 bg-gray-900/60 rounded-2xl text-sm"><span>1 Oyun (Öğrenci)</span><span class="font-bold text-purple-400">150 ₺</span></div>
                 `;
             } else if (tab === 'menu') {
                 tabTitle.innerText = "Cafe & Menü";
                 appData.menuItems.forEach(m => {
                     tabBody.innerHTML += `
-                        <div class="flex justify-between p-3 bg-gray-900/50 rounded-xl text-sm">
+                        <div class="flex justify-between p-3.5 bg-gray-900/60 rounded-2xl text-sm">
                             <span>${m.name}</span>
                             <span class="font-bold text-amber-400">${m.price}</span>
                         </div>
                     `;
                 });
             } else if (tab === 'kampanya') {
-                tabTitle.innerText = "Tüm Kampanyalar";
-                tabBody.innerHTML = "<p class='text-xs text-gray-400'>Yukarıdaki kaydırılabilir kartlardan detayları inceleyebilirsiniz.</p>";
+                tabTitle.innerText = "Kampanyalar";
+                tabBody.innerHTML = "<p class='text-xs text-gray-400'>Yukarıdaki kartları sağa kaydırarak tüm kampanyaları inceleyebilirsiniz.</p>";
             } else if (tab === 'etkinlik') {
-                tabTitle.innerText = "Etkinlikler & Turnuvalar";
-                tabBody.innerHTML = "<p class='text-xs text-gray-400'>Yakında düzenlenecek bowling turnuvaları burada duyurulacaktır.</p>";
+                tabTitle.innerText = "Etkinlikler";
+                tabBody.innerHTML = "<p class='text-xs text-gray-400'>Turnuva tarihleri yakında açıklanacaktır.</p>";
             }
         }
 
-        // YÖNETİCİ PANELİ MANTIĞI (5 TIKLAMA)
+        // 5 TIK YÖNETİCİ MODU
         let clickCount = 0;
         let clickTimer;
         function handleLogoClick() {
@@ -322,13 +329,12 @@
             appData.hero.btnText = document.getElementById('input-btn-text').value;
             appData.hero.btnLink = document.getElementById('input-btn-link').value;
 
-            localStorage.setItem('venus_app_data', JSON.stringify(appData));
+            localStorage.setItem('venus_app_data_v2', JSON.stringify(appData));
             renderApp();
             closeAdmin();
             alert("Tüm değişiklikler kaydedildi!");
         }
 
-        // İlk Çalıştırma
         renderApp();
     </script>
 </body>
