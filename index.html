@@ -4,76 +4,125 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Venüs Bowling - QR Menü</title>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #7b4d9b; --accent: #fa0050; --bg: #f8f9fa; --text: #1a1a1a; --gray: #707070; }
-        * { box-sizing: border-box; font-family: 'Open Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { margin: 0; background: var(--bg); color: var(--text); padding-bottom: 120px; }
-
-        .header-container { 
-            background: white; padding: 20px; text-align: center; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05); border-bottom: 1px solid #f0f0f0;
+        :root { 
+            --bg-dark: #0f0c20; 
+            --card-bg: #18152e; 
+            --primary: #9d4edd; 
+            --primary-glow: rgba(157, 78, 221, 0.4);
+            --accent: #ff0055; 
+            --accent-glow: rgba(255, 0, 85, 0.4);
+            --text-main: #ffffff; 
+            --text-muted: #a0a0b8; 
+            --border-color: #2a264a;
         }
-        .header-container img { max-width: 200px; height: auto; display: block; margin: 0 auto; cursor: pointer; }
-        .status-badge {
-            display: inline-block; margin-top: 10px; background: #e8f5e9; color: #2e7d32;
-            padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; border: 1px solid #c8e6c9;
-        }
-
-        .cat-nav { position: sticky; top: 0; background: white; display: flex; overflow-x: auto; padding: 12px 15px; gap: 15px; border-bottom: 1px solid #eee; z-index: 1000; scrollbar-width: none; }
-        .cat-nav::-webkit-scrollbar { display: none; }
-        .cat-item { white-space: nowrap; font-size: 14px; font-weight: 700; color: var(--gray); cursor: pointer; border-bottom: 3px solid transparent; padding-bottom: 5px; transition: 0.3s; }
-        .cat-item.active { color: var(--primary); border-bottom-color: var(--primary); }
-
-        .container { max-width: 700px; margin: auto; }
-        .section-box { background: white; margin-top: 12px; padding: 15px; }
-        .section-title { font-size: 18px; font-weight: 800; color: #333; margin-bottom: 15px; border-left: 4px solid var(--primary); padding-left: 10px; }
         
-        .product-card { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #f0f0f0; cursor: pointer; }
-        .product-card:last-child { border: none; }
-        .p-info { flex: 1; padding-right: 12px; }
-        .p-name { font-size: 15px; font-weight: 700; margin: 0; color: #111; }
-        .p-desc { font-size: 12px; color: var(--gray); margin: 4px 0; line-height: 1.4; }
-        .p-price { font-size: 15px; font-weight: 700; color: #000; margin-top: 4px; }
+        * { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { margin: 0; background: var(--bg-dark); color: var(--text-main); padding-bottom: 110px; }
 
-        .p-img-box { position: relative; width: 80px; height: 80px; }
-        .p-img { width: 80px; height: 80px; border-radius: 10px; object-fit: cover; background: #eee; }
-        .add-btn { position: absolute; bottom: -5px; right: -5px; background: white; color: var(--accent); border: 1px solid #ddd; width: 28px; height: 28px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        /* Header */
+        .header-container { 
+            background: linear-gradient(180deg, #18152e 0%, var(--bg-dark) 100%); 
+            padding: 25px 20px 15px; text-align: center; 
+            border-bottom: 1px solid var(--border-color);
+        }
+        .header-container img { max-width: 180px; height: auto; display: block; margin: 0 auto; cursor: pointer; filter: drop-shadow(0 0 8px rgba(255,255,255,0.2)); }
+        .status-badge {
+            display: inline-flex; align-items: center; gap: 6px; margin-top: 12px; background: rgba(46, 125, 50, 0.15); color: #4caf50;
+            padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 700; border: 1px solid rgba(76, 175, 80, 0.3);
+        }
+        .status-dot { width: 7px; height: 7px; background: #4caf50; border-radius: 50%; box-shadow: 0 0 8px #4caf50; }
 
-        .cart-bar { position: fixed; bottom: 20px; left: 15px; right: 15px; background: var(--accent); color: white; padding: 16px 20px; border-radius: 15px; display: none; justify-content: space-between; align-items: center; box-shadow: 0 10px 25px rgba(250,0,80,0.3); z-index: 1500; cursor: pointer; }
+        .callout { 
+            margin: 15px 15px 5px; padding: 14px 16px; 
+            background: linear-gradient(135deg, rgba(255,0,85,0.15) 0%, rgba(157,78,221,0.15) 100%); 
+            border: 1px solid var(--border-color); border-radius: 16px; font-size: 13px; color: #fff; text-align: center; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2); font-weight: 600; line-height: 1.4;
+        }
 
-        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; z-index: 2000; align-items: flex-end; justify-content: center; }
-        .modal-box { background: white; width: 100%; max-width: 550px; border-radius: 25px 25px 0 0; padding: 20px; animation: slideUp 0.3s ease-out; max-height: 90vh; overflow-y: auto; }
+        /* Navilasyon - Kategori Butonları */
+        .cat-nav { position: sticky; top: 0; background: rgba(15, 12, 32, 0.95); backdrop-filter: blur(10px); display: flex; overflow-x: auto; padding: 12px 15px; gap: 10px; border-bottom: 1px solid var(--border-color); z-index: 1000; scrollbar-width: none; }
+        .cat-nav::-webkit-scrollbar { display: none; }
+        .cat-item { 
+            white-space: nowrap; font-size: 13px; font-weight: 700; color: var(--text-muted); cursor: pointer; 
+            padding: 8px 16px; border-radius: 20px; background: var(--card-bg); border: 1px solid var(--border-color); transition: all 0.3s ease; 
+        }
+        .cat-item.active { color: #fff; background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%); border-color: transparent; box-shadow: 0 0 12px var(--accent-glow); }
+
+        /* Ürün Kartları */
+        .container { max-width: 650px; margin: auto; padding: 0 12px; }
+        .section-box { margin-top: 20px; }
+        .section-title { font-size: 17px; font-weight: 800; color: #fff; margin-bottom: 12px; padding-left: 8px; border-left: 4px solid var(--accent); display: flex; align-items: center; justify-content: space-between; }
+        
+        .product-card { 
+            display: flex; justify-content: space-between; align-items: center;
+            background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 18px;
+            padding: 14px; margin-bottom: 12px; cursor: pointer; transition: transform 0.2s, border-color 0.2s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        .product-card:active { transform: scale(0.98); }
+        .p-info { flex: 1; padding-right: 14px; }
+        .p-name { font-size: 15px; font-weight: 700; margin: 0; color: #fff; }
+        .p-desc { font-size: 12px; color: var(--text-muted); margin: 6px 0; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .p-price { font-size: 16px; font-weight: 800; color: #00f0ff; margin-top: 6px; }
+
+        .p-img-box { position: relative; width: 85px; height: 85px; flex-shrink: 0; }
+        .p-img { width: 85px; height: 85px; border-radius: 14px; object-fit: cover; background: #231f42; }
+        .add-btn { 
+            position: absolute; bottom: -6px; right: -6px; 
+            background: linear-gradient(135deg, var(--accent) 0%, #ff5500 100%); color: #fff; 
+            width: 30px; height: 30px; border-radius: 10px; display: flex; align-items: center; justify-content: center; 
+            font-size: 20px; font-weight: bold; box-shadow: 0 4px 10px var(--accent-glow); 
+        }
+
+        /* Alt Sepet Barı */
+        .cart-bar { 
+            position: fixed; bottom: 20px; left: 15px; right: 15px; 
+            background: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%); color: white; 
+            padding: 16px 20px; border-radius: 20px; display: none; justify-content: space-between; align-items: center; 
+            box-shadow: 0 10px 30px var(--accent-glow); z-index: 1500; cursor: pointer; backdrop-filter: blur(5px);
+        }
+
+        /* Modal Yapıları */
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); display: none; z-index: 2000; align-items: flex-end; justify-content: center; }
+        .modal-box { 
+            background: #18152e; border: 1px solid var(--border-color); width: 100%; max-width: 550px; 
+            border-radius: 28px 28px 0 0; padding: 24px; animation: slideUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            max-height: 85vh; overflow-y: auto; color: #fff;
+        }
         @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
         
-        textarea, input[type="text"], input[type="number"], select { width: 100%; border: 1px solid #ddd; border-radius: 10px; padding: 10px; margin: 6px 0; font-size: 14px; outline: none; }
-        textarea { height: 70px; }
+        textarea, input[type="text"], input[type="number"], select { 
+            width: 100%; background: #0f0c20; border: 1px solid var(--border-color); color: #fff;
+            border-radius: 12px; padding: 12px 14px; margin: 8px 0; font-size: 14px; outline: none; 
+        }
+        textarea:focus, input:focus { border-color: var(--primary); box-shadow: 0 0 8px var(--primary-glow); }
+        textarea { height: 80px; resize: none; }
         
-        .btn-confirm { width: 100%; background: var(--accent); color: white; border: none; padding: 14px; border-radius: 12px; font-weight: 700; font-size: 15px; cursor: pointer; }
-        .btn-final { width: 100%; background: #27ae60; color: white; border: none; padding: 16px; border-radius: 12px; font-weight: 700; font-size: 16px; margin-top: 10px; cursor: pointer; }
-        .btn-admin { background: var(--primary); color: white; border: none; padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer; width: 100%; margin-top: 10px; }
+        .btn-confirm { width: 100%; background: linear-gradient(135deg, var(--accent) 0%, #ff5500 100%); color: white; border: none; padding: 15px; border-radius: 14px; font-weight: 700; font-size: 15px; cursor: pointer; box-shadow: 0 4px 15px var(--accent-glow); }
+        .btn-final { width: 100%; background: #00c853; color: white; border: none; padding: 16px; border-radius: 14px; font-weight: 800; font-size: 16px; margin-top: 12px; cursor: pointer; box-shadow: 0 4px 15px rgba(0, 200, 83, 0.4); }
+        .btn-admin { background: var(--primary); color: white; border: none; padding: 12px; border-radius: 10px; font-weight: 700; cursor: pointer; width: 100%; margin-top: 10px; }
 
-        .cart-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #f2f2f2; }
-        .remove-btn { color: #eb4d4b; font-size: 13px; font-weight: 700; cursor: pointer; }
+        .cart-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border-color); }
+        .remove-btn { color: #ff5252; font-size: 13px; font-weight: 700; cursor: pointer; background: rgba(255, 82, 82, 0.1); padding: 4px 10px; border-radius: 8px; }
 
-        .admin-item-row { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding: 8px 0; font-size: 13px; }
-        .admin-actions { display: flex; gap: 5px; align-items: center; }
-        .admin-btn-sm { padding: 4px 8px; border-radius: 5px; border: none; font-size: 11px; font-weight: 700; cursor: pointer; }
-        .btn-edit { background: #f39c12; color: white; }
-        .btn-del { background: #e74c3c; color: white; }
-        .btn-move { background: #3498db; color: white; }
+        .admin-item-row { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding: 10px 0; font-size: 13px; }
+        .admin-actions { display: flex; gap: 6px; align-items: center; }
+        .admin-btn-sm { padding: 5px 10px; border-radius: 6px; border: none; font-size: 11px; font-weight: 700; cursor: pointer; }
+        .btn-edit { background: #ff9100; color: white; }
+        .btn-del { background: #ff5252; color: white; }
+        .btn-move { background: #29b6f6; color: white; }
 
-        .stock-toggle { display: flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 700; background: #f0f0f0; padding: 4px 8px; border-radius: 6px; cursor: pointer; }
+        .stock-toggle { display: flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 700; background: #231f42; padding: 5px 8px; border-radius: 6px; cursor: pointer; color: #fff; }
         .stock-toggle input { cursor: pointer; margin: 0; }
-
-        .callout { margin: 10px 15px 0; padding: 12px; background: #fff0f5; border-left: 4px solid var(--accent); border-radius: 10px; font-size: 13px; color: #333; text-align: center; box-shadow: 0 2px 6px rgba(0,0,0,.04); font-weight: 600; }
     </style>
 </head>
 <body>
 
 <div class="header-container">
     <img src="https://i.imgur.com/JdlJSWi_d.jpeg?maxwidth=520&shape=thumb&fidelity=high" alt="Venüs Bowling Logo" onclick="handleLogoClick()">
-    <div class="status-badge">● Restoran Açık</div>
+    <div class="status-badge"><div class="status-dot"></div> Restoran & Bowling Açık</div>
 </div>
 <div class="callout">🎳 Oyunu bölme, masandan siparişini ver! Yiyecek ve soğuk içeceğin doğrudan kulvarına gelsin.</div>
 
@@ -83,29 +132,29 @@
 <!-- MÜŞTERİ NOT MODALI -->
 <div class="modal" id="modal-note">
     <div class="modal-box">
-        <h3 id="m-title" style="margin:0">Ürün Adı</h3>
-        <p style="font-size:12px; color:gray; margin-top:5px;">İstediğiniz bir değişiklik veya ekstra not var mı?</p>
+        <h3 id="m-title" style="margin:0; font-size: 18px;">Ürün Adı</h3>
+        <p style="font-size:12px; color:var(--text-muted); margin-top:5px;">İstediğiniz bir değişiklik veya ekstra not var mı?</p>
         <textarea id="m-note" placeholder="Örn: İçecek soğuk olsun, sosu bol olsun..."></textarea>
         <button class="btn-confirm" onclick="addToCartFinal()">Sepete Ekle</button>
-        <button onclick="closeModal('modal-note')" style="width:100%; background:none; color:gray; border:none; margin-top:10px; cursor:pointer;">Vazgeç</button>
+        <button onclick="closeModal('modal-note')" style="width:100%; background:none; color:var(--text-muted); border:none; margin-top:12px; cursor:pointer; font-weight:600;">Vazgeç</button>
     </div>
 </div>
 
 <!-- SEPET MODALI -->
 <div class="modal" id="modal-cart">
     <div class="modal-box">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-            <h2 style="margin:0; font-size:20px;">Sipariş Kontrolü 🛒</h2>
-            <button onclick="closeModal('modal-cart')" style="border:none; background:none; font-size:22px; cursor:pointer;">✕</button>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+            <h2 style="margin:0; font-size:20px;">Sipariş Özeti 🛒</h2>
+            <button onclick="closeModal('modal-cart')" style="border:none; background:none; color:#fff; font-size:22px; cursor:pointer;">✕</button>
         </div>
-        <input type="text" id="table-number" placeholder="Kulvar / Masa No (Örn: Kulvar 3 Veya Masa 5)">
-        <div id="cart-check-list"></div>
-        <div style="margin-top:15px; border-top:2px solid #f8f8f8; padding-top:10px;">
+        <input type="text" id="table-number" placeholder="Kulvar / Masa No (Örn: Kulvar 3 veya Masa 5)">
+        <div id="cart-check-list" style="margin-top:10px;"></div>
+        <div style="margin-top:20px; border-top:1px solid var(--border-color); padding-top:15px;">
             <div style="display:flex; justify-content:space-between; font-weight:800; font-size:20px;">
                 <span>Toplam:</span>
-                <span id="final-price">0,00 ₺</span>
+                <span id="final-price" style="color:#00f0ff;">0,00 ₺</span>
             </div>
-            <button class="btn-final" onclick="sendToWhatsApp()">Siparişi Onayla ve Gönder</button>
+            <button class="btn-final" onclick="sendToWhatsApp()">Siparişi Onayla ve Gönder 🚀</button>
         </div>
     </div>
 </div>
@@ -115,14 +164,14 @@
     <div class="modal-box">
         <div style="display:flex; justify-content:space-between; align-items:center;">
             <h3 style="margin:0; color:var(--primary);">⚙️ Yönetici Paneli</h3>
-            <button onclick="closeModal('modal-admin')" style="border:none; background:none; font-size:22px; cursor:pointer;">✕</button>
+            <button onclick="closeModal('modal-admin')" style="border:none; background:none; color:#fff; font-size:22px; cursor:pointer;">✕</button>
         </div>
-        <hr style="border:0; border-top:1px solid #eee; margin:10px 0;">
+        <hr style="border:0; border-top:1px solid var(--border-color); margin:12px 0;">
 
-        <h4>📂 Kategori Sıralamasını Değiştir</h4>
-        <div id="admin-cat-list" style="max-height: 150px; overflow-y: auto; background: #fdfdfd; border: 1px solid #eee; padding: 5px; border-radius: 8px;"></div>
+        <h4 style="margin:5px 0 10px;">📂 Kategori Sıralaması</h4>
+        <div id="admin-cat-list" style="max-height: 140px; overflow-y: auto; background: #0f0c20; border: 1px solid var(--border-color); padding: 8px; border-radius: 12px;"></div>
 
-        <h4 style="margin-top:15px;">➕ Yeni Ürün Ekle / Düzenle</h4>
+        <h4 style="margin:15px 0 10px;">➕ Ürün Ekle / Düzenle</h4>
         <input type="hidden" id="admin-edit-index">
         <select id="admin-cat-select"></select>
         <input type="text" id="admin-p-name" placeholder="Ürün Adı">
@@ -131,16 +180,16 @@
         <input type="text" id="admin-p-img" placeholder="Görsel Linki (Opsiyonel)">
         <button class="btn-admin" onclick="saveProduct()">Ürünü Kaydet</button>
 
-        <h4 style="margin-top:20px;">📝 Stok Durumu & Ürün Yönetimi</h4>
-        <div id="admin-product-list" style="max-height: 220px; overflow-y: auto;"></div>
+        <h4 style="margin:20px 0 10px;">📝 Ürün ve Stok Yönetimi</h4>
+        <div id="admin-product-list" style="max-height: 200px; overflow-y: auto;"></div>
 
-        <button onclick="resetMenuToDefault()" style="background:#e74c3c; color:white; border:none; padding:8px; border-radius:8px; width:100%; margin-top:15px; font-size:12px; cursor:pointer;">Varsayılan Menüye Sıfırla</button>
+        <button onclick="resetMenuToDefault()" style="background:#ff5252; color:white; border:none; padding:10px; border-radius:10px; width:100%; margin-top:15px; font-size:12px; font-weight:700; cursor:pointer;">Varsayılan Menüye Sıfırla</button>
     </div>
 </div>
 
 <div class="cart-bar" id="cart-bar" onclick="openCartModal()">
-    <div style="font-weight:700;">Siparişi Gözden Geçir (<span id="cart-qty">0</span>)</div>
-    <div id="cart-total" style="font-weight:800; font-size:16px;">0,00 ₺</div>
+    <div style="font-weight:700; font-size:14px;">Siparişi Tamamla (<span id="cart-qty">0</span>)</div>
+    <div id="cart-total" style="font-weight:800; font-size:17px;">0,00 ₺</div>
 </div>
 
 <script>
@@ -173,7 +222,7 @@
                 {n: "Ortaya Karışık Sıcak Sepeti", p: 320, d: "Sosis, Soğan Halkası, Paçanga Böreği, Patates Cipsi ve Dip Soslar", i: "https://i.imgur.com/Tl0hZh1_d.jpeg?maxwidth=520&shape=thumb&fidelity=high", available: true}
             ],
             icecekler: [
-                {n: "Kutu Meşrubatlar (333ml)", p: 70, d: "Coca-Cola, Fanta, Sprite, Fuse Tea Seçenekleri", i: "", available: true},
+                {n: "Kutu Meşrubatlar (330ml)", p: 70, d: "Coca-Cola, Fanta, Sprite, Fuse Tea Seçenekleri", i: "", available: true},
                 {n: "Red Bull Enerji İçeceği", p: 110, d: "250ml Kutuda Tazeleyici Enerji", i: "", available: true},
                 {n: "Meyve Suları", p: 65, d: "Cappy Çeşitleri (Şeftali, Vişne, Karışık)", i: "", available: true},
                 {n: "Maden Suyu / Meyveli Soda", p: 45, d: "Sade Maden Suyu veya Meyveli Soda", i: "", available: true},
@@ -230,14 +279,14 @@
         }
     };
 
-    let menuData = JSON.parse(localStorage.getItem('venus_menu_v7')) || DEFAULT_MENU;
+    let menuData = JSON.parse(localStorage.getItem('venus_menu_v8')) || DEFAULT_MENU;
     let cart = [];
     let tempItem = null;
     let logoClickCount = 0;
     let logoClickTimer = null;
 
     function saveMenuToStorage() {
-        localStorage.setItem('venus_menu_v7', JSON.stringify(menuData));
+        localStorage.setItem('venus_menu_v8', JSON.stringify(menuData));
         initUI();
     }
 
@@ -268,7 +317,7 @@
                                 <p class="p-price">${item.p},00 ₺</p>
                             </div>
                             <div class="p-img-box">
-                                <img class="p-img" src="${item.i}" onerror="this.onerror=null; this.style.visibility='hidden';">
+                                <img class="p-img" src="${item.i}" onerror="this.onerror=null; this.style.display='none';">
                                 <div class="add-btn">+</div>
                             </div>
                         </div>
@@ -279,7 +328,7 @@
             container.innerHTML += `
                 <div class="section-box" id="section-${cat.id}">
                     <div class="section-title">${cat.name}</div>
-                    <div>${productsHTML || '<p style="font-size:12px; color:gray;">Bu kategoride aktif ürün bulunmamaktadır.</p>'}</div>
+                    <div>${productsHTML || '<p style="font-size:12px; color:var(--text-muted); padding: 5px 8px;">Bu kategoride aktif ürün bulunmamaktadır.</p>'}</div>
                 </div>
             `;
         });
@@ -355,7 +404,7 @@
         document.getElementById('admin-p-price').value = "";
         document.getElementById('admin-p-desc').value = "";
         document.getElementById('admin-p-img').value = "";
-        alert("Ürün Başarıyla Kaydedildi!");
+        alert("Ürün Kaydedildi!");
     }
 
     function renderAdminProductList() {
@@ -366,7 +415,7 @@
                 const isChecked = item.available !== false ? 'checked' : '';
                 list.innerHTML += `
                     <div class="admin-item-row">
-                        <span style="${item.available === false ? 'text-decoration:line-through; color:gray;' : ''}"><b>${item.n}</b> - ${item.p}₺</span>
+                        <span style="${item.available === false ? 'text-decoration:line-through; color:var(--text-muted);' : ''}"><b>${item.n}</b> - ${item.p}₺</span>
                         <div class="admin-actions">
                             <label class="stock-toggle">
                                 <input type="checkbox" ${isChecked} onchange="toggleStock('${catId}', ${index})">
@@ -406,7 +455,7 @@
 
     function resetMenuToDefault() {
         if (confirm("Tüm değişiklikler sıfırlanıp varsayılan tam menüye dönülecektir. Onaylıyor musunuz?")) {
-            localStorage.removeItem('venus_menu_v7');
+            localStorage.removeItem('venus_menu_v8');
             menuData = DEFAULT_MENU;
             saveMenuToStorage();
         }
@@ -436,9 +485,9 @@
             checkList.innerHTML += `
                 <div class="cart-row">
                     <div style="flex:1">
-                        <div style="font-weight:700;">${item.n}</div>
-                        <div style="font-size:12px; color:var(--accent);">${item.note ? '📝 ' + item.note : ''}</div>
-                        <div style="font-weight:700; margin-top:4px;">${item.p},00 ₺</div>
+                        <div style="font-weight:700; font-size:15px;">${item.n}</div>
+                        <div style="font-size:12px; color:var(--accent); margin-top:2px;">${item.note ? '📝 ' + item.note : ''}</div>
+                        <div style="font-weight:700; margin-top:4px; color:#00f0ff;">${item.p},00 ₺</div>
                     </div>
                     <div class="remove-btn" onclick="removeItem(${item.id})">Kaldır</div>
                 </div>
@@ -458,7 +507,7 @@
     function go(id) {
         const section = document.getElementById("section-" + id);
         if (!section) return;
-        window.scrollTo({ top: section.offsetTop - 110, behavior: "smooth" });
+        window.scrollTo({ top: section.offsetTop - 100, behavior: "smooth" });
         document.querySelectorAll(".cat-item").forEach(i => i.classList.remove("active"));
         const navItem = document.querySelector(`.cat-item[data-cat="${id}"]`);
         if (navItem) navItem.classList.add("active");
